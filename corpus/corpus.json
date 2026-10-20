@@ -1,0 +1,12 @@
+[
+  { "repo": "sindresorhus/ky", "language": "TypeScript", "license": "MIT", "commit": "3541888878c4d303a8bc2ad61815f4e048f55a5d" },
+  { "repo": "expressjs/express", "language": "JavaScript", "license": "MIT", "commit": "0dee2c52c7c873498f8ed7d8ee4ddd0a04d3ada8" },
+  { "repo": "pallets/click", "language": "Python", "license": "BSD-3-Clause", "commit": "2247b35ea1c47c727d7a06e51fa280e12a863ff6" },
+  { "repo": "spf13/cobra", "language": "Go", "license": "Apache-2.0", "commit": "adbc8813901bba65827259daa8e22ff94ec1f30e" },
+  { "repo": "sharkdp/hyperfine", "language": "Rust", "license": "Apache-2.0", "commit": "c5161524980522320c7d3425e714cc0965a869a5" },
+  { "repo": "jhy/jsoup", "language": "Java", "license": "MIT", "commit": "4cf664cdb2e9d2cc2d40fdf3bb9c0be0be22f865" },
+  { "repo": "DaveGamble/cJSON", "language": "C", "license": "MIT", "commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c" },
+  { "repo": "sinatra/sinatra", "language": "Ruby", "license": "MIT", "commit": "cb22afd7902b566b6eaba6c4ea89739494a65d12" },
+  { "repo": "guzzle/guzzle", "language": "PHP", "license": "MIT", "commit": "b920e5fcaf81d761b8fabe600ca90999beaefdb7" },
+  { "repo": "App-vNext/Polly", "language": "C#", "license": "BSD-3-Clause", "commit": "3f3adad9d5af85658fc3585018f02a2d8c2173e8" }
+]
