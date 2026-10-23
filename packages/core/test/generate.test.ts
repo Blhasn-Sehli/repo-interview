@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildPrompt,
   generateQuestions,
+  ollama,
   openAICompatible,
   parseQuestions,
   RecordedProvider,
@@ -74,6 +75,20 @@ describe("RecordedProvider", () => {
     const replay = new RecordedProvider(dir);
     expect(await replay.complete(req)).toBe("hello");
     await expect(replay.complete({ system: "s", prompt: "other" })).rejects.toThrow(/no recording/);
+  });
+});
+
+describe("ollama", () => {
+  it("uses the native chat API with a context window large enough for the prompt", async () => {
+    let seen: { url: string; body: any } | undefined;
+    const fetchStub = (async (url: string, init: RequestInit) => {
+      seen = { url, body: JSON.parse(String(init.body)) };
+      return new Response(JSON.stringify({ message: { content: "hi" } }));
+    }) as typeof fetch;
+    const p = ollama({ model: "qwen", fetch: fetchStub });
+    expect(await p.complete({ system: "s", prompt: "p" })).toBe("hi");
+    expect(seen!.url).toBe("http://localhost:11434/api/chat");
+    expect(seen!.body).toMatchObject({ model: "qwen", stream: false, options: { num_ctx: 16384 } });
   });
 });
 

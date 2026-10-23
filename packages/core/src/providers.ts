@@ -71,9 +71,40 @@ export function openAICompatible(opts: OpenAICompatibleOptions, id = `openai-com
   };
 }
 
-/** Local model through Ollama's OpenAI-compatible endpoint; code never leaves the machine. */
-export function ollama(opts: { model: string; baseURL?: string; fetch?: typeof fetch }): ModelProvider {
-  return openAICompatible({ baseURL: opts.baseURL ?? "http://localhost:11434/v1", model: opts.model, fetch: opts.fetch }, `ollama:${opts.model}`);
+export interface OllamaOptions {
+  model: string;
+  baseURL?: string;
+  /** context window in tokens; Ollama's own default (4096 on small GPUs) silently cuts long prompts */
+  numCtx?: number;
+  fetch?: typeof fetch;
+}
+
+/** Local model through Ollama's native chat API; code never leaves the machine. */
+export function ollama(opts: OllamaOptions): ModelProvider {
+  const doFetch = opts.fetch ?? fetch;
+  const url = `${(opts.baseURL ?? "http://localhost:11434").replace(/\/+$/, "")}/api/chat`;
+  return {
+    id: `ollama:${opts.model}`,
+    async complete({ system, prompt }) {
+      const res = await doFetch(url, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          model: opts.model,
+          stream: false,
+          options: { num_ctx: opts.numCtx ?? 16384 },
+          messages: [
+            { role: "system", content: system },
+            { role: "user", content: prompt },
+          ],
+        }),
+      });
+      if (!res.ok) throw new Error(`${url} returned ${res.status}: ${await res.text()}`);
+      const body = (await res.json()) as { message?: { content?: string } };
+      if (typeof body.message?.content !== "string") throw new Error(`${url} returned no message content`);
+      return body.message.content;
+    },
+  };
 }
 
 /**
