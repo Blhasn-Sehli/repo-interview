@@ -15,8 +15,12 @@ const PATTERNS: Record<string, Pattern[]> = {
   typescript: [
     ["function", /^\s*(?:export\s+)?(?:default\s+)?(?:async\s+)?function\*?\s+([A-Za-z_$][\w$]*)/],
     ["class", /^\s*(?:export\s+)?(?:default\s+)?(?:abstract\s+)?class\s+([A-Za-z_$][\w$]*)/],
-    ["type", /^\s*(?:export\s+)?(?:interface|type|enum)\s+([A-Za-z_$][\w$]*)/],
+    ["type", /^\s*(?:export\s+)?(?:declare\s+)?(?:interface|(?:const\s+)?enum)\s+([A-Za-z_$][\w$]*)/],
+    // `type X =` only: a bare `type X,` is a type-only import specifier, not a definition.
+    ["type", /^\s*(?:export\s+)?(?:declare\s+)?type\s+([A-Za-z_$][\w$]*)\s*(?:<[^=]*>)?\s*=/],
     ["function", /^\s*(?:export\s+)?(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*(?:async\s*)?(?:\(|function|[A-Za-z_$][\w$]*\s*=>)/],
+    // `res.send = function send(...)`, common in older JS such as express
+    ["function", /^\s*[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*\.([A-Za-z_$][\w$]*)\s*=\s*(?:async\s+)?function\b/],
   ],
   python: [
     ["function", /^\s*(?:async\s+)?def\s+([A-Za-z_]\w*)/],
