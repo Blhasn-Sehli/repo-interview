@@ -1,4 +1,4 @@
-import { mkdtempSync, readdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -37,6 +37,20 @@ describe("buildPrompt", () => {
     const { prompt } = buildPrompt(scanRepo(root));
     expect(prompt).toContain("a.ts:1");
     expect(prompt).toContain("return n * 2; // backoff");
+  });
+
+  it("asks for a JSON schema so providers that support it can enforce the shape", () => {
+    const { schema } = buildPrompt(scanRepo(root));
+    expect(schema).toMatchObject({ type: "object", required: ["questions"] });
+  });
+
+  it("shows source files before test files", () => {
+    const r = mkdtempSync(join(tmpdir(), "ri-tests-"));
+    mkdirSync(join(r, "test"));
+    writeFileSync(join(r, "test", "a.test.ts"), "function t1() {}\nfunction t2() {}\nfunction t3() {}\n");
+    writeFileSync(join(r, "core.ts"), "export function run() {}\n");
+    const { prompt } = buildPrompt(scanRepo(r));
+    expect(prompt.indexOf("core.ts")).toBeLessThan(prompt.indexOf("test/a.test.ts"));
   });
 
   it("keeps excerpts within the character budget", () => {
@@ -89,6 +103,18 @@ describe("ollama", () => {
     expect(await p.complete({ system: "s", prompt: "p" })).toBe("hi");
     expect(seen!.url).toBe("http://localhost:11434/api/chat");
     expect(seen!.body).toMatchObject({ model: "qwen", stream: false, options: { num_ctx: 16384, num_predict: 2048 } });
+    expect(seen!.body.format).toBeUndefined();
+  });
+
+  it("passes a requested JSON schema as Ollama's format", async () => {
+    let body: any;
+    const fetchStub = (async (_url: string, init: RequestInit) => {
+      body = JSON.parse(String(init.body));
+      return new Response(JSON.stringify({ message: { content: "{}" } }));
+    }) as typeof fetch;
+    const schema = { type: "object" };
+    await ollama({ model: "qwen", fetch: fetchStub }).complete({ system: "s", prompt: "p", schema });
+    expect(body.format).toEqual(schema);
   });
 });
 

@@ -1,0 +1,424 @@
+{
+  "summary": {
+    "provider": "recording:ollama:qwen2.5-coder:3b",
+    "date": "2026-10-23",
+    "repos": 10,
+    "asked": 80,
+    "kept": 64,
+    "citedRealShare": 0.8
+  },
+  "rows": [
+    {
+      "repo": "sindresorhus/ky",
+      "commit": "3541888878c4d303a8bc2ad61815f4e048f55a5d",
+      "asked": 8,
+      "kept": 8,
+      "dropped": [],
+      "questions": [
+        {
+          "text": "How does the `raceWithTimeout` function work and why is it used in the code?",
+          "file": "source/core/Ky.ts",
+          "symbol": "raceWithTimeout"
+        },
+        {
+          "text": "Explain how the `cancelReturnedBody` function handles the cancellation of the body of a value.",
+          "file": "source/core/Ky.ts",
+          "symbol": "cancelReturnedBody"
+        },
+        {
+          "text": "What are the properties and their roles in the `ErrorDataTimeout` type definition?",
+          "file": "source/core/Ky.ts",
+          "symbol": "ErrorDataTimeout"
+        },
+        {
+          "text": "How does the `createTextDecoder` function handle different content types?",
+          "file": "source/core/Ky.ts",
+          "symbol": "createTextDecoder"
+        },
+        {
+          "text": "What is the purpose of the `ReplaceMarked` type and how is it used in the `merge` function?",
+          "file": "source/utils/merge.ts",
+          "symbol": "ReplaceMarked"
+        },
+        {
+          "text": "How does the `getReplaceState` function handle plain objects and `Headers` instances?",
+          "file": "source/utils/merge.ts",
+          "symbol": "getReplaceState"
+        },
+        {
+          "text": "Explain the purpose of the `validateAndMerge` function and how it handles multiple sources of options.",
+          "file": "source/utils/merge.ts",
+          "symbol": "validateAndMerge"
+        },
+        {
+          "text": "How are headers merged in the `mergeHeaders` function, and what is the significance of deletion markers?",
+          "file": "source/utils/merge.ts",
+          "symbol": "mergeHeaders"
+        }
+      ]
+    },
+    {
+      "repo": "expressjs/express",
+      "commit": "0dee2c52c7c873498f8ed7d8ee4ddd0a04d3ada8",
+      "asked": 8,
+      "kept": 8,
+      "dropped": [],
+      "questions": [
+        {
+          "text": "In `lib/response.js`, how does the `status` method handle invalid or out-of-range status codes? ",
+          "file": "lib/response.js"
+        },
+        {
+          "text": "In `lib/response.js`, what is the purpose of the `send` method and how does it determine the content type based on the input?",
+          "file": "lib/response.js"
+        },
+        {
+          "text": "In `lib/application.js`, what is the default value for the `env` setting and what are the default settings for the `query parser` and `subdomain offset`?",
+          "file": "lib/application.js"
+        },
+        {
+          "text": "In `lib/utils.js`, how does the `acceptParams` function handle multiple charset values and how is it used in the `req.acceptsCharsets` method?",
+          "file": "lib/utils.js"
+        },
+        {
+          "text": "In `lib/view.js`, what is the purpose of the `View` constructor and how does it initialize the `ext` and `root` properties?",
+          "file": "lib/view.js"
+        },
+        {
+          "text": "In `examples/mvc/controllers/user/index.js`, how does the `before` middleware function interact with the `User` model and what is its purpose?",
+          "file": "examples/mvc/controllers/user/index.js"
+        },
+        {
+          "text": "In `examples/mvc/lib/boot.js`, how does the `boot` function process the controllers directory and how is the app configured with the loaded controllers?",
+          "file": "examples/mvc/lib/boot.js"
+        },
+        {
+          "text": "In `examples/search/index.js`, what is the purpose of the `initializeRedis` function and how does it connect to and populate a Redis database?",
+          "file": "examples/search/index.js"
+        }
+      ]
+    },
+    {
+      "repo": "pallets/click",
+      "commit": "2247b35ea1c47c727d7a06e51fa280e12a863ff6",
+      "asked": 8,
+      "kept": 7,
+      "dropped": [
+        "file not found: src/click/context.py"
+      ],
+      "questions": [
+        {
+          "text": "What is the purpose of the `_check_nested_chain` function in the `core.py` file? How does it check if a group can be nested within another group in chain mode?",
+          "file": "src/click/core.py",
+          "symbol": "_check_nested_chain"
+        },
+        {
+          "text": "How does the `_echo_aborted` function in the `core.py` file write the abort message to standard error? What is the default stream used by this function?",
+          "file": "src/click/core.py",
+          "symbol": "_echo_aborted"
+        },
+        {
+          "text": "What is the purpose of the `_outside_click_stacklevel` function in the `core.py` file? How does it determine the depth of the first stack frame outside Click?",
+          "file": "src/click/core.py",
+          "symbol": "_outside_click_stacklevel"
+        },
+        {
+          "text": "What is the purpose of the `_format_deprecated_label` and `_format_deprecated_suffix` functions in the `core.py` file? How are they used in the `core.py` file?",
+          "file": "src/click/core.py",
+          "symbol": "_format_deprecated_label"
+        },
+        {
+          "text": "How does the `process_command` function in the `imagepipe.py` file process a stream of image processors? What does it return?",
+          "file": "examples/imagepipe/imagepipe.py",
+          "symbol": "process_commands"
+        },
+        {
+          "text": "How does the `processor` function in the `imagepipe.py` file create a new function that wraps another function and returns it? What is the purpose of this new function?",
+          "file": "examples/imagepipe/imagepipe.py",
+          "symbol": "processor"
+        },
+        {
+          "text": "What is the purpose of the `make_pass_decorator` function in the `decorators.py` file? How does it create a pass-decorator for a given object type?",
+          "file": "src/click/decorators.py",
+          "symbol": "make_pass_decorator"
+        }
+      ]
+    },
+    {
+      "repo": "spf13/cobra",
+      "commit": "adbc8813901bba65827259daa8e22ff94ec1f30e",
+      "asked": 8,
+      "kept": 7,
+      "dropped": [
+        "symbol not found: InitDefaultHelpFlag"
+      ],
+      "questions": [
+        {
+          "text": "What is the purpose of the `FParseErrWhitelist` struct in the `command.go` file? Provide an example of how it might be used.",
+          "file": "command.go",
+          "symbol": "FParseErrWhitelist"
+        },
+        {
+          "text": "Explain the role of the `Group` struct in the `command.go` file and provide an example of how it might be used.",
+          "file": "command.go",
+          "symbol": "Group"
+        },
+        {
+          "text": "Describe the `Use` field in the `Command` struct. What is the recommended syntax for its usage?",
+          "file": "command.go",
+          "symbol": "Use"
+        },
+        {
+          "text": "What is the purpose of the `Aliases` field in the `Command` struct? Provide an example of how it might be used.",
+          "file": "command.go",
+          "symbol": "Aliases"
+        },
+        {
+          "text": "What is the difference between `ShellCompDirectiveError` and `ShellCompDirectiveNoSpace` in the `completions.go` file? Provide an example of how they might be used.",
+          "file": "completions.go",
+          "symbol": "ShellCompDirectiveError"
+        },
+        {
+          "text": "What is the purpose of the `validArgsFunc` function in the `completions_test.go` file? Provide an example of how it might be used.",
+          "file": "completions_test.go",
+          "symbol": "validArgsFunc"
+        },
+        {
+          "text": "What is the purpose of the `MarkPersistentFlagRequired` function in the `shell_completions.go` file? Provide an example of how it might be used.",
+          "file": "shell_completions.go",
+          "symbol": "MarkPersistentFlagRequired"
+        }
+      ]
+    },
+    {
+      "repo": "sharkdp/hyperfine",
+      "commit": "c5161524980522320c7d3425e714cc0965a869a5",
+      "asked": 8,
+      "kept": 8,
+      "dropped": [],
+      "questions": [
+        {
+          "text": "How does the `Command` struct handle environment overrides? Explain the purpose of the `environment` field in the `Command` struct.",
+          "file": "src/command.rs",
+          "symbol": "environment"
+        },
+        {
+          "text": "What is the purpose of the `serialize_optional_information` function in the `measurement.rs` module? Provide an example of how it is used.",
+          "file": "src/benchmark/measurement.rs",
+          "symbol": "serialize_optional_information"
+        },
+        {
+          "text": "How does the `Metric` enum represent different types of metrics? Discuss the `name` and `label` methods of the `Metric` enum.",
+          "file": "src/metric.rs",
+          "symbol": "Metric"
+        },
+        {
+          "text": "What is the `Shell` enum used for, and explain how it is parsed from a string in the `options.rs` module.",
+          "file": "src/options.rs",
+          "symbol": "Shell"
+        },
+        {
+          "text": "How is the `Executor` trait defined and what methods does it require? Provide an example of a command execution in the `executor.rs` module.",
+          "file": "src/benchmark/executor.rs",
+          "symbol": "Executor"
+        },
+        {
+          "text": "Explain the purpose of the `RangeStep` struct in the `parameter/range_step.rs` module and discuss how the `new` method validates the range parameters.",
+          "file": "src/parameter/range_step.rs",
+          "symbol": "RangeStep"
+        },
+        {
+          "text": "What does the `tokenize` function do in the `shell_syntax.rs` module, and why is it important for parsing shell commands?",
+          "file": "src/shell_syntax.rs",
+          "symbol": "tokenize"
+        },
+        {
+          "text": "How does the `HyperfineSummary` struct represent the summary of benchmark results, and what are the fields of this struct?",
+          "file": "src/export/json.rs",
+          "symbol": "HyperfineSummary"
+        }
+      ]
+    },
+    {
+      "repo": "jhy/jsoup",
+      "commit": "4cf664cdb2e9d2cc2d40fdf3bb9c0be0be22f865",
+      "asked": 8,
+      "kept": 8,
+      "dropped": [],
+      "questions": [
+        {
+          "text": "In which package does the `Element` class reside in the Jsoup library?",
+          "file": "src/main/java/org/jsoup/nodes/Element.java"
+        },
+        {
+          "text": "What is the purpose of the `hasChildNodes()` method in the `Node` class?",
+          "file": "src/main/java/org/jsoup/nodes/Node.java"
+        },
+        {
+          "text": "What is the purpose of the `encodeMimeName` method in the `HttpConnection` class?",
+          "file": "src/main/java/org/jsoup/helper/HttpConnection.java"
+        },
+        {
+          "text": "What is the purpose of the `parseSelectorGroup` method in the `QueryParser` class?",
+          "file": "src/main/java/org/jsoup/select/QueryParser.java"
+        },
+        {
+          "text": "What is the purpose of the `join` method in the `StringUtil` class?",
+          "file": "src/main/java/org/jsoup/internal/StringUtil.java"
+        },
+        {
+          "text": "What is the purpose of the `convert` method in the `W3CDom` class?",
+          "file": "src/main/java/org/jsoup/helper/W3CDom.java"
+        },
+        {
+          "text": "What is the purpose of the `location` method in the `Document` class?",
+          "file": "src/main/java/org/jsoup/nodes/Document.java"
+        },
+        {
+          "text": "What is the purpose of the `safeClose` method in the `RequestExecutor` abstract class?",
+          "file": "src/main/java/org/jsoup/helper/RequestExecutor.java"
+        }
+      ]
+    },
+    {
+      "repo": "DaveGamble/cJSON",
+      "commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c",
+      "asked": 8,
+      "kept": 3,
+      "dropped": [
+        "file not found: unity_internals.h",
+        "file not found: unity.h",
+        "file not found: unity.h",
+        "file not found: unity.h",
+        "file not found: unity.h"
+      ],
+      "questions": [
+        {
+          "text": "In which line of cJSON.c is the macro _CRT_SECURE_NO_DEPRECATE defined?",
+          "file": "cjson.c"
+        },
+        {
+          "text": "What defines true and false in cJSON.h?",
+          "file": "cjson.h"
+        },
+        {
+          "text": "How are functions declared in cJSON.h exposed to users?",
+          "file": "cjson.h"
+        }
+      ]
+    },
+    {
+      "repo": "sinatra/sinatra",
+      "commit": "cb22afd7902b566b6eaba6c4ea89739494a65d12",
+      "asked": 8,
+      "kept": 8,
+      "dropped": [],
+      "questions": [
+        {
+          "text": "What is the default token length used by the `AuthenticityToken` class in `rack-protection`?",
+          "file": "rack-protection/lib/rack/protection/authenticity_token.rb",
+          "symbol": "TOKEN_LENGTH"
+        },
+        {
+          "text": "What is the default method used by the `Base` class to respond when the middleware rejects the response?",
+          "file": "rack-protection/lib/rack/protection/base.rb",
+          "symbol": "reaction"
+        },
+        {
+          "text": "What is the default status code used by the `Base` class when a request is rejected via the `deny` method?",
+          "file": "rack-protection/lib/rack/protection/base.rb",
+          "symbol": "status"
+        },
+        {
+          "text": "What is the default message sent when a request is rejected via the `deny` method in the `Base` class?",
+          "file": "rack-protection/lib/rack/protection/base.rb",
+          "symbol": "message"
+        },
+        {
+          "text": "What is the default encryptor used by the `Base` class?",
+          "file": "rack-protection/lib/rack/protection/base.rb",
+          "symbol": "encryptor"
+        },
+        {
+          "text": "What is the default value for the `session_key` option in the `Base` class?",
+          "file": "rack-protection/lib/rack/protection/base.rb",
+          "symbol": "session_key"
+        },
+        {
+          "text": "What is the default value for the `allow_empty_referrer` option in the `Base` class?",
+          "file": "rack-protection/lib/rack/protection/base.rb",
+          "symbol": "allow_empty_referrer"
+        },
+        {
+          "text": "What is the default value for the `report_key` option in the `Base` class?",
+          "file": "rack-protection/lib/rack/protection/base.rb",
+          "symbol": "report_key"
+        }
+      ]
+    },
+    {
+      "repo": "guzzle/guzzle",
+      "commit": "b920e5fcaf81d761b8fabe600ca90999beaefdb7",
+      "asked": 8,
+      "kept": 1,
+      "dropped": [
+        "symbol not found: CurlFactory::__construct",
+        "symbol not found: CurlFactory::isCurlShareHandle",
+        "symbol not found: StreamHandler::__construct",
+        "symbol not found: CurlMultiHandler::__construct",
+        "symbol not found: Client::__construct",
+        "symbol not found: AuthMiddleware::__construct",
+        "symbol not found: CurlVersion::__construct"
+      ],
+      "questions": [
+        {
+          "text": "What is the purpose of the `DELEGATED_PROXY_TUNNEL_OWNER` constant in the `CurlFactory` class?",
+          "file": "src/Handler/CurlFactory.php",
+          "symbol": "DELEGATED_PROXY_TUNNEL_OWNER"
+        }
+      ]
+    },
+    {
+      "repo": "App-vNext/Polly",
+      "commit": "3f3adad9d5af85658fc3585018f02a2d8c2173e8",
+      "asked": 8,
+      "kept": 6,
+      "dropped": [
+        "symbol not found: Isolate",
+        "symbol not found: BreakFor_NeedsLock"
+      ],
+      "questions": [
+        {
+          "text": "What is the default delay when using the Retry strategy in Polly, and how can it be configured?",
+          "file": "src/Snippets/Docs/Retry.cs",
+          "symbol": "RetryStrategyOptions"
+        },
+        {
+          "text": "How does the `TryGetDelay` method determine the retry delay based on the `Retry-After` header in an HTTP response?",
+          "file": "src/Snippets/Docs/Retry.cs",
+          "symbol": "TryGetDelay"
+        },
+        {
+          "text": "What is the purpose of the `Usage` method in the Fallback class and how is it configured to use a substitute value if an operation fails?",
+          "file": "src/Snippets/Docs/Fallback.cs",
+          "symbol": "Usage"
+        },
+        {
+          "text": "How is a fallback action defined in the FallbackStrategyOptions class when using Polly for fallback handling in C#?",
+          "file": "src/Snippets/Docs/Fallback.cs",
+          "symbol": "FallbackStrategyOptions"
+        },
+        {
+          "text": "What is the default behavior of the CircuitBreaker strategy in Polly, and how can it be configured to break based on specific conditions?",
+          "file": "src/Snippets/Docs/CircuitBreaker.cs",
+          "symbol": "CircuitBreakerStrategyOptions"
+        },
+        {
+          "text": "How does the `GlobalSetup` method in the Cache benchmark setup the memory cache for synchronous and asynchronous operations, and what are the benchmark methods for cache hit and miss scenarios?",
+          "file": "bench/Polly.Benchmarks/Cache.cs",
+          "symbol": "GlobalSetup"
+        }
+      ]
+    }
+  ]
+}

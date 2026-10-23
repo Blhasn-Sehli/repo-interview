@@ -3,7 +3,12 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-export interface CompletionRequest { system: string; prompt: string }
+export interface CompletionRequest {
+  system: string;
+  prompt: string;
+  /** JSON schema the reply must follow; providers that can enforce it do, others rely on the prompt */
+  schema?: object;
+}
 
 /** Anything that turns a system + user prompt into text. Adapters below; tests use RecordedProvider. */
 export interface ModelProvider {
@@ -85,7 +90,7 @@ export function ollama(opts: OllamaOptions): ModelProvider {
   const url = `${(opts.baseURL ?? "http://localhost:11434").replace(/\/+$/, "")}/api/chat`;
   return {
     id: `ollama:${opts.model}`,
-    async complete({ system, prompt }) {
+    async complete({ system, prompt, schema }) {
       const res = await doFetch(url, {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -95,6 +100,7 @@ export function ollama(opts: OllamaOptions): ModelProvider {
           // stay loaded between corpus repos; cap output so a rambling small model can't run for minutes
           keep_alive: "30m",
           options: { num_ctx: opts.numCtx ?? 16384, num_predict: 2048 },
+          ...(schema ? { format: schema } : {}),
           messages: [
             { role: "system", content: system },
             { role: "user", content: prompt },
