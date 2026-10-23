@@ -26,7 +26,7 @@ Options for questions:
   --json               print JSON instead of text
 
 openai reads OPENAI_API_KEY; anthropic reads ANTHROPIC_API_KEY.
-Only file paths and symbol names are sent to the model at this stage.`;
+Sent to the model: file paths, symbol names and short code excerpts (about 24 KB at most).`;
 
 function provider(values: Record<string, string | boolean | undefined>): ModelProvider {
   if (typeof values.replay === "string") return new RecordedProvider(values.replay);

@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  buildPrompt,
   generateQuestions,
   openAICompatible,
   parseQuestions,
@@ -23,6 +24,24 @@ describe("parseQuestions", () => {
     expect(parseQuestions('[{"text":"x"},{"file":"a"},{"text":"ok","file":"a.ts"}]')).toEqual([
       { text: "ok", file: "a.ts" },
     ]);
+  });
+});
+
+describe("buildPrompt", () => {
+  const root = mkdtempSync(join(tmpdir(), "ri-prompt-"));
+  writeFileSync(join(root, "a.ts"), "export function retry(n: number) {\n  return n * 2; // backoff\n}\n");
+  writeFileSync(join(root, "b.ts"), "export const big = () => 1;\n" + "// filler\n".repeat(400));
+
+  it("includes code excerpts around cited symbols, labelled with path and line", () => {
+    const { prompt } = buildPrompt(scanRepo(root));
+    expect(prompt).toContain("a.ts:1");
+    expect(prompt).toContain("return n * 2; // backoff");
+  });
+
+  it("keeps excerpts within the character budget", () => {
+    const { prompt } = buildPrompt(scanRepo(root), { maxExcerptChars: 60 });
+    expect(prompt).toContain("a.ts (typescript): retry");
+    expect(prompt).not.toContain("// filler");
   });
 });
 
