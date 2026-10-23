@@ -1,18 +1,22 @@
 {
   "summary": {
-    "provider": "recording:ollama:qwen2.5-coder:3b",
+    "provider": "recorded",
     "date": "2026-10-23",
     "repos": 10,
     "asked": 80,
-    "kept": 64,
-    "citedRealShare": 0.8
+    "strict": 64,
+    "fair": 76,
+    "strictShare": 0.8,
+    "fairShare": 0.95
   },
   "rows": [
     {
       "repo": "sindresorhus/ky",
       "commit": "3541888878c4d303a8bc2ad61815f4e048f55a5d",
       "asked": 8,
-      "kept": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
       "dropped": [],
       "questions": [
         {
@@ -61,7 +65,9 @@
       "repo": "expressjs/express",
       "commit": "0dee2c52c7c873498f8ed7d8ee4ddd0a04d3ada8",
       "asked": 8,
-      "kept": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
       "dropped": [],
       "questions": [
         {
@@ -102,7 +108,9 @@
       "repo": "pallets/click",
       "commit": "2247b35ea1c47c727d7a06e51fa280e12a863ff6",
       "asked": 8,
-      "kept": 7,
+      "strict": 7,
+      "fair": 7,
+      "rescued": [],
       "dropped": [
         "file not found: src/click/context.py"
       ],
@@ -148,7 +156,9 @@
       "repo": "spf13/cobra",
       "commit": "adbc8813901bba65827259daa8e22ff94ec1f30e",
       "asked": 8,
-      "kept": 7,
+      "strict": 7,
+      "fair": 7,
+      "rescued": [],
       "dropped": [
         "symbol not found: InitDefaultHelpFlag"
       ],
@@ -194,7 +204,9 @@
       "repo": "sharkdp/hyperfine",
       "commit": "c5161524980522320c7d3425e714cc0965a869a5",
       "asked": 8,
-      "kept": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
       "dropped": [],
       "questions": [
         {
@@ -243,7 +255,9 @@
       "repo": "jhy/jsoup",
       "commit": "4cf664cdb2e9d2cc2d40fdf3bb9c0be0be22f865",
       "asked": 8,
-      "kept": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
       "dropped": [],
       "questions": [
         {
@@ -284,14 +298,16 @@
       "repo": "DaveGamble/cJSON",
       "commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c",
       "asked": 8,
-      "kept": 3,
-      "dropped": [
-        "file not found: unity_internals.h",
-        "file not found: unity.h",
-        "file not found: unity.h",
-        "file not found: unity.h",
-        "file not found: unity.h"
+      "strict": 3,
+      "fair": 8,
+      "rescued": [
+        "path-suffix: tests/unity/src/unity_internals.h",
+        "path-suffix: tests/unity/src/unity.h",
+        "path-suffix: tests/unity/src/unity.h",
+        "path-suffix: tests/unity/src/unity.h",
+        "path-suffix: tests/unity/src/unity.h"
       ],
+      "dropped": [],
       "questions": [
         {
           "text": "In which line of cJSON.c is the macro _CRT_SECURE_NO_DEPRECATE defined?",
@@ -304,6 +320,26 @@
         {
           "text": "How are functions declared in cJSON.h exposed to users?",
           "file": "cjson.h"
+        },
+        {
+          "text": "What does the macro UNITY_PTR_TO_INT define in unity_internals.h?",
+          "file": "tests/unity/src/unity_internals.h"
+        },
+        {
+          "text": "Which macro is used to define a test case in unity.h?",
+          "file": "tests/unity/src/unity.h"
+        },
+        {
+          "text": "What happens when a test fails and what macro is used to abort the test?",
+          "file": "tests/unity/src/unity.h"
+        },
+        {
+          "text": "What are the functions that are declared as extern ",
+          "file": "tests/unity/src/unity.h"
+        },
+        {
+          "text": "How can you use the macro TEST_FILE in your test functions?",
+          "file": "tests/unity/src/unity.h"
         }
       ]
     },
@@ -311,7 +347,9 @@
       "repo": "sinatra/sinatra",
       "commit": "cb22afd7902b566b6eaba6c4ea89739494a65d12",
       "asked": 8,
-      "kept": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
       "dropped": [],
       "questions": [
         {
@@ -360,21 +398,58 @@
       "repo": "guzzle/guzzle",
       "commit": "b920e5fcaf81d761b8fabe600ca90999beaefdb7",
       "asked": 8,
-      "kept": 1,
-      "dropped": [
-        "symbol not found: CurlFactory::__construct",
-        "symbol not found: CurlFactory::isCurlShareHandle",
-        "symbol not found: StreamHandler::__construct",
-        "symbol not found: CurlMultiHandler::__construct",
-        "symbol not found: Client::__construct",
-        "symbol not found: AuthMiddleware::__construct",
-        "symbol not found: CurlVersion::__construct"
+      "strict": 1,
+      "fair": 8,
+      "rescued": [
+        "qualified-symbol: src/Handler/CurlFactory.php › CurlFactory::__construct",
+        "qualified-symbol: src/Handler/CurlFactory.php › CurlFactory::isCurlShareHandle",
+        "qualified-symbol: src/Handler/StreamHandler.php › StreamHandler::__construct",
+        "qualified-symbol: src/Handler/CurlMultiHandler.php › CurlMultiHandler::__construct",
+        "qualified-symbol: src/Client.php › Client::__construct",
+        "qualified-symbol: src/AuthMiddleware.php › AuthMiddleware::__construct",
+        "qualified-symbol: src/Handler/CurlVersion.php › CurlVersion::__construct"
       ],
+      "dropped": [],
       "questions": [
         {
           "text": "What is the purpose of the `DELEGATED_PROXY_TUNNEL_OWNER` constant in the `CurlFactory` class?",
           "file": "src/Handler/CurlFactory.php",
           "symbol": "DELEGATED_PROXY_TUNNEL_OWNER"
+        },
+        {
+          "text": "What options can be passed to the `__construct` method of the `CurlFactory` class?",
+          "file": "src/Handler/CurlFactory.php",
+          "symbol": "CurlFactory::__construct"
+        },
+        {
+          "text": "What does the `isCurlShareHandle` method check for in the `CurlFactory` class?",
+          "file": "src/Handler/CurlFactory.php",
+          "symbol": "CurlFactory::isCurlShareHandle"
+        },
+        {
+          "text": "What options can be passed to the `__construct` method of the `StreamHandler` class?",
+          "file": "src/Handler/StreamHandler.php",
+          "symbol": "StreamHandler::__construct"
+        },
+        {
+          "text": "What options can be passed to the `__construct` method of the `CurlMultiHandler` class?",
+          "file": "src/Handler/CurlMultiHandler.php",
+          "symbol": "CurlMultiHandler::__construct"
+        },
+        {
+          "text": "What options can be passed to the `__construct` method of the `Client` class?",
+          "file": "src/Client.php",
+          "symbol": "Client::__construct"
+        },
+        {
+          "text": "What options can be passed to the `__construct` method of the `AuthMiddleware` class?",
+          "file": "src/AuthMiddleware.php",
+          "symbol": "AuthMiddleware::__construct"
+        },
+        {
+          "text": "What options can be passed to the `__construct` method of the `CurlVersion` class?",
+          "file": "src/Handler/CurlVersion.php",
+          "symbol": "CurlVersion::__construct"
         }
       ]
     },
@@ -382,7 +457,9 @@
       "repo": "App-vNext/Polly",
       "commit": "3f3adad9d5af85658fc3585018f02a2d8c2173e8",
       "asked": 8,
-      "kept": 6,
+      "strict": 6,
+      "fair": 6,
+      "rescued": [],
       "dropped": [
         "symbol not found: Isolate",
         "symbol not found: BreakFor_NeedsLock"

@@ -15,7 +15,16 @@ export interface GenerateOptions {
   excerptLines?: number;
 }
 
-export interface GenerateResult { kept: Question[]; dropped: Verdict[] }
+export interface GenerateResult {
+  /** questions that pass the fair check, with resolved file paths */
+  kept: Question[];
+  /** questions that fail even the fair check */
+  dropped: Verdict[];
+  /** how many passed the strict check (exact path and symbol text) */
+  strictKept: number;
+  /** questions only the fair check accepted, and the rule that accepted each */
+  rescued: Verdict[];
+}
 
 const SYSTEM = [
   "You interview a developer about their own repository to check they understand it.",
@@ -98,9 +107,13 @@ export function parseQuestions(raw: string): Question[] {
 /** Ask the provider for questions, then keep only those whose cited file and symbol exist. */
 export async function generateQuestions(scan: ScanResult, provider: ModelProvider, opts: GenerateOptions = {}): Promise<GenerateResult> {
   const raw = await provider.complete(buildPrompt(scan, opts));
-  const verdicts = verifyQuestions(scan.root, parseQuestions(raw));
+  const questions = parseQuestions(raw);
+  const strict = verifyQuestions(scan.root, questions);
+  const fair = verifyQuestions(scan.root, questions, { mode: "fair", files: scan.files.map((f) => f.path) });
   return {
-    kept: verdicts.filter((v) => v.ok).map((v) => v.question),
-    dropped: verdicts.filter((v) => !v.ok),
+    kept: fair.filter((v) => v.ok).map((v) => v.question),
+    dropped: fair.filter((v) => !v.ok),
+    strictKept: strict.filter((v) => v.ok).length,
+    rescued: fair.filter((v) => v.ok && v.rule),
   };
 }

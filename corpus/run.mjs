@@ -38,20 +38,41 @@ const rows = [];
 for (const { repo, commit } of entries) {
   const root = join(here, "repos", repo.replace("/", "__"));
   try {
-    const { kept, dropped } = await generateQuestions(scanRepo(root), provider, { count: Number(values.count) });
-    rows.push({ repo, commit, asked: kept.length + dropped.length, kept: kept.length, dropped: dropped.map((v) => v.reason), questions: kept });
+    const { kept, dropped, strictKept, rescued } = await generateQuestions(scanRepo(root), provider, { count: Number(values.count) });
+    rows.push({
+      repo,
+      commit,
+      asked: kept.length + dropped.length,
+      strict: strictKept,
+      fair: kept.length,
+      rescued: rescued.map((v) => `${v.rule}: ${v.question.file}${v.question.symbol ? ` › ${v.question.symbol}` : ""}`),
+      dropped: dropped.map((v) => v.reason),
+      questions: kept,
+    });
   } catch (err) {
     rows.push({ repo, commit, error: err instanceof Error ? err.message : String(err) });
   }
   const r = rows.at(-1);
-  console.log(r.error ? `${repo}: ERROR ${r.error}` : `${repo}: ${r.kept}/${r.asked} questions cite real code`);
+  console.log(r.error ? `${repo}: ERROR ${r.error}` : `${repo}: strict ${r.strict}/${r.asked}, fair ${r.fair}/${r.asked}`);
 }
 
 const ok = rows.filter((r) => !r.error);
-const asked = ok.reduce((n, r) => n + r.asked, 0);
-const kept = ok.reduce((n, r) => n + r.kept, 0);
-const summary = { provider: provider.id, date: new Date().toISOString().slice(0, 10), repos: ok.length, asked, kept, citedRealShare: asked ? kept / asked : null };
-console.log(`\n${kept}/${asked} questions cite real code across ${ok.length} repos (${asked ? ((100 * kept) / asked).toFixed(1) : "n/a"}%)`);
+const sum = (key) => ok.reduce((n, r) => n + r[key], 0);
+const asked = sum("asked");
+const pct = (n) => (asked ? `${((100 * n) / asked).toFixed(1)}%` : "n/a");
+const summary = {
+  provider: provider.id,
+  date: new Date().toISOString().slice(0, 10),
+  repos: ok.length,
+  asked,
+  strict: sum("strict"),
+  fair: sum("fair"),
+  strictShare: asked ? sum("strict") / asked : null,
+  fairShare: asked ? sum("fair") / asked : null,
+};
+console.log(`\nAcross ${ok.length} repos, questions citing real code:`);
+console.log(`  strict (exact path and symbol): ${summary.strict}/${asked} (${pct(summary.strict)})`);
+console.log(`  fair (folder-less paths, Class::method): ${summary.fair}/${asked} (${pct(summary.fair)})`);
 
 if (!ok.length) process.exit(1);
 mkdirSync(join(here, "results"), { recursive: true });

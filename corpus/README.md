@@ -21,6 +21,20 @@ Selection rules: one primary language each, permissive license, pushed to in 202
 
 Checked 21 Oct 2026 with the GitHub API: none archived, all licenses as listed.
 
+## Results
+
+Share of generated questions whose cited file and symbol exist. One run, one small local model, 8 questions per repo; not yet a benchmark.
+
+| Date | Model | Repos answered | Strict | Fair |
+| --- | --- | --- | --- | --- |
+| 2026-10-23 | ollama `qwen2.5-coder:3b` | 10/10 | 64/80 (80.0%) | 76/80 (95.0%) |
+
+- **Strict:** the path and the symbol text appear exactly as the model wrote them.
+- **Fair:** also accepts a path written without its folders when exactly one repo file ends with it (`unity.h` for `tests/unity/src/unity.h`), and `Class::method` when every part appears in the file.
+- The 4 citations that fail both checks are invented: a file that does not exist (`src/click/context.py`) and three symbols missing from the cited files.
+
+Per-repo details are in [`results/`](results/); the raw model replies are in [`recordings/`](recordings/), so `node corpus/run.mjs --replay corpus/recordings` recomputes both numbers offline.
+
 ## Rejected candidates
 
 - `google/gson`, `colinhacks/zod`, `serilog/serilog`: larger than needed when a smaller repo covers the language.

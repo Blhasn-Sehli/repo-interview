@@ -90,7 +90,9 @@ async function main(argv: string[]): Promise<number> {
       console.log(JSON.stringify(result, null, 2));
     } else {
       result.kept.forEach((q, i) => console.log(`${i + 1}. ${q.text}\n   ${q.file}${q.symbol ? ` › ${q.symbol}` : ""}`));
-      console.log(`\n${result.kept.length} kept, ${result.dropped.length} dropped by the verifier`);
+      const asked = result.kept.length + result.dropped.length;
+      console.log(`\n${result.kept.length}/${asked} kept (fair check), ${result.strictKept}/${asked} pass the strict check`);
+      for (const v of result.rescued) console.log(`  accepted by ${v.rule}: ${v.question.file}${v.question.symbol ? ` › ${v.question.symbol}` : ""}`);
       for (const v of result.dropped) console.log(`  dropped: ${v.reason}`);
     }
     return 0;
