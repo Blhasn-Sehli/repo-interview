@@ -92,7 +92,9 @@ export function ollama(opts: OllamaOptions): ModelProvider {
         body: JSON.stringify({
           model: opts.model,
           stream: false,
-          options: { num_ctx: opts.numCtx ?? 16384 },
+          // stay loaded between corpus repos; cap output so a rambling small model can't run for minutes
+          keep_alive: "30m",
+          options: { num_ctx: opts.numCtx ?? 16384, num_predict: 2048 },
           messages: [
             { role: "system", content: system },
             { role: "user", content: prompt },

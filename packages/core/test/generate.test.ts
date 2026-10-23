@@ -88,7 +88,7 @@ describe("ollama", () => {
     const p = ollama({ model: "qwen", fetch: fetchStub });
     expect(await p.complete({ system: "s", prompt: "p" })).toBe("hi");
     expect(seen!.url).toBe("http://localhost:11434/api/chat");
-    expect(seen!.body).toMatchObject({ model: "qwen", stream: false, options: { num_ctx: 16384 } });
+    expect(seen!.body).toMatchObject({ model: "qwen", stream: false, options: { num_ctx: 16384, num_predict: 2048 } });
   });
 });
 
