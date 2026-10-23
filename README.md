@@ -4,20 +4,23 @@ Interviews you about your own repo (or a PR diff) so you can prove you understan
 
 ## Status
 
-Early skeleton, not usable yet. What works today:
+Early, rough edges expected. What works today:
 
 - `repo-interview scan <path>` lists source files and candidate symbols (regex-based, 8 language families).
-- `repo-interview questions <path> --provider anthropic|openai|ollama` asks a model for questions and drops any whose cited file or symbol does not exist. Only file paths and symbol names are sent to the model so far; no code excerpts yet.
+- `repo-interview questions <path> --provider anthropic|openai|ollama` asks a model for questions and drops any whose cited file or symbol does not exist (strict and fair checks, see the [test corpus](corpus/README.md)).
+- `repo-interview interview <path> --provider ...` asks the questions in your terminal, grades each answer 0-3 against the cited code, asks one follow-up after a weak answer, and writes `interview-report.md` with what to study next.
 - `--record <dir>` / `--replay <dir>` save and replay model responses, so tests run offline.
 
-Not built yet: the interview session, answer scoring, the report, the PR gate Action, tree-sitter symbol lookup. No accuracy numbers are published yet; they will come from the [test corpus](corpus/README.md).
+Measured so far: on 10 public repos with a small local model, 80% of questions cite real code under the strict check and 95% under the fair check ([details](corpus/README.md#results)). Grading quality has not been measured yet; with small local models it is rough.
+
+Not built yet: the PR gate Action, tree-sitter symbol lookup, multi-line answers.
 
 ## Try it
 
 ```bash
 pnpm install && pnpm build
 node packages/cli/dist/index.js scan .
-node packages/cli/dist/index.js questions . --provider ollama --model qwen2.5-coder
+node packages/cli/dist/index.js interview . --provider ollama --model qwen2.5-coder:3b
 ```
 
 ## License

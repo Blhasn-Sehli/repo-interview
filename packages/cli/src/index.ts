@@ -5,10 +5,15 @@ import {
   ollama,
   openAICompatible,
   RecordedProvider,
+  renderReport,
+  runInterview,
   scanRepo,
+  scoreAnswer,
   type ModelProvider,
 } from "@repo-interview/core";
-import { resolve } from "node:path";
+import { writeFileSync } from "node:fs";
+import { basename, resolve } from "node:path";
+import { createInterface } from "node:readline";
 import { parseArgs } from "node:util";
 
 const USAGE = `repo-interview 0.0.0 (early skeleton)
@@ -16,17 +21,20 @@ const USAGE = `repo-interview 0.0.0 (early skeleton)
 Usage:
   repo-interview scan <path> [--json]
   repo-interview questions <path> --provider <anthropic|openai|ollama> [options]
+  repo-interview interview <path> --provider <anthropic|openai|ollama> [options]
 
-Options for questions:
+Options for questions and interview:
   --model <name>       model id (anthropic default: claude-opus-5-5)
   --base-url <url>     server for openai/ollama providers
   --count <n>          questions to request (default 8)
   --record <dir>       save model responses to <dir>
   --replay <dir>       answer from saved responses only (no network)
   --json               print JSON instead of text
+  --out <file>         interview report path (default interview-report.md)
 
 openai reads OPENAI_API_KEY; anthropic reads ANTHROPIC_API_KEY.
-Sent to the model: file paths, symbol names and short code excerpts (about 24 KB at most).`;
+Sent to the model: file paths, symbol names, short code excerpts (about 24 KB at most)
+and, in an interview, your answers with the code each question cites.`;
 
 function provider(values: Record<string, string | boolean | undefined>): ModelProvider {
   if (typeof values.replay === "string") return new RecordedProvider(values.replay);
@@ -63,6 +71,7 @@ async function main(argv: string[]): Promise<number> {
       count: { type: "string" },
       record: { type: "string" },
       replay: { type: "string" },
+      out: { type: "string" },
       help: { type: "boolean", short: "h" },
     },
   });
@@ -94,6 +103,41 @@ async function main(argv: string[]): Promise<number> {
       console.log(`\n${result.kept.length}/${asked} kept (fair check), ${result.strictKept}/${asked} pass the strict check`);
       for (const v of result.rescued) console.log(`  accepted by ${v.rule}: ${v.question.file}${v.question.symbol ? ` › ${v.question.symbol}` : ""}`);
       for (const v of result.dropped) console.log(`  dropped: ${v.reason}`);
+    }
+    return 0;
+  }
+
+  if (command === "interview") {
+    const p = provider(values);
+    console.log("Reading the repo and preparing questions...");
+    const { kept } = await generateQuestions(scan, p, { count: values.count ? Number(values.count) : undefined });
+    if (!kept.length) throw new Error("the model returned no usable questions; try again or another model");
+    console.log(`${kept.length} questions. Answer in one line and press Enter (empty = skip).\n`);
+    // Iterate lines instead of rl.question(): with piped input, question() drops lines read ahead of it.
+    const rl = createInterface({ input: process.stdin, output: process.stdout });
+    const lines = rl[Symbol.asyncIterator]();
+    let n = 0;
+    try {
+      const results = await runInterview(kept, {
+        ask: async (text) => {
+          const isFollowUp = !kept.some((q) => q.text === text);
+          const q = kept.find((k) => k.text === text);
+          if (!isFollowUp) n++;
+          const header = isFollowUp ? "  Follow-up: " : `Q${n}/${kept.length}. `;
+          const cite = q ? `\n   ${q.file}${q.symbol ? ` › ${q.symbol}` : ""}` : "";
+          process.stdout.write(`${header}${text}${cite}\n> `);
+          const next = await lines.next();
+          return next.done ? "" : next.value;
+        },
+        say: (text) => console.log(`  ${text}\n`),
+        score: (q, answer, followUp) => scoreAnswer(scan.root, q, answer, p, followUp),
+      });
+      const out = resolve(values.out ?? "interview-report.md");
+      writeFileSync(out, renderReport(basename(scan.root), results));
+      const graded = results.filter((r) => r.score !== null);
+      console.log(`Done: ${graded.reduce((s, r) => s + r.score!, 0)}/${graded.length * 3}. Report saved to ${out}`);
+    } finally {
+      rl.close();
     }
     return 0;
   }

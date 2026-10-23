@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { request as httpRequest } from "node:http";
 import { join } from "node:path";
 
 export interface CompletionRequest {
@@ -84,9 +85,25 @@ export interface OllamaOptions {
   fetch?: typeof fetch;
 }
 
+/**
+ * POST without fetch's 5-minute wait for response headers: Ollama sends none until the model is
+ * loaded, and loading from a slow disk can take longer than that.
+ */
+const patientFetch = ((url: string, init: RequestInit) =>
+  new Promise<Response>((resolveRes, reject) => {
+    const req = httpRequest(url, { method: init.method, headers: init.headers as Record<string, string> }, (res) => {
+      const chunks: Buffer[] = [];
+      res.on("data", (c: Buffer) => chunks.push(c));
+      res.on("end", () => resolveRes(new Response(Buffer.concat(chunks), { status: res.statusCode })));
+      res.on("error", reject);
+    });
+    req.on("error", reject);
+    req.end(init.body as string);
+  })) as typeof fetch;
+
 /** Local model through Ollama's native chat API; code never leaves the machine. */
 export function ollama(opts: OllamaOptions): ModelProvider {
-  const doFetch = opts.fetch ?? fetch;
+  const doFetch = opts.fetch ?? patientFetch;
   const url = `${(opts.baseURL ?? "http://localhost:11434").replace(/\/+$/, "")}/api/chat`;
   return {
     id: `ollama:${opts.model}`,
