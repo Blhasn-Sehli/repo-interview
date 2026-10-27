@@ -38,13 +38,13 @@ const rows = [];
 for (const { repo, commit } of entries) {
   const root = join(here, "repos", repo.replace("/", "__"));
   try {
-    const { kept, dropped, strictKept, rescued } = await generateQuestions(scanRepo(root), provider, { count: Number(values.count) });
+    const { kept, dropped, asked, strictKept, fairKept, rescued } = await generateQuestions(scanRepo(root), provider, { count: Number(values.count) });
     rows.push({
       repo,
       commit,
-      asked: kept.length + dropped.length,
+      asked,
       strict: strictKept,
-      fair: kept.length,
+      fair: fairKept,
       rescued: rescued.map((v) => `${v.rule}: ${v.question.file}${v.question.symbol ? ` › ${v.question.symbol}` : ""}`),
       dropped: dropped.map((v) => v.reason),
       questions: kept,

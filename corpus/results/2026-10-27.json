@@ -1,0 +1,490 @@
+{
+  "summary": {
+    "provider": "recording:ollama:qwen2.5-coder:3b",
+    "date": "2026-10-27",
+    "repos": 10,
+    "asked": 80,
+    "strict": 71,
+    "fair": 77,
+    "strictShare": 0.8875,
+    "fairShare": 0.9625
+  },
+  "rows": [
+    {
+      "repo": "sindresorhus/ky",
+      "commit": "3541888878c4d303a8bc2ad61815f4e048f55a5d",
+      "asked": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
+      "dropped": [],
+      "questions": [
+        {
+          "text": "How does the `raceWithTimeout` function work? What is its purpose, and how does it handle timeouts and settled promises?",
+          "file": "source/core/Ky.ts",
+          "symbol": "raceWithTimeout"
+        },
+        {
+          "text": "What is the purpose of the `cancelReturnedBody` function, and how is it used?",
+          "file": "source/core/Ky.ts",
+          "symbol": "cancelReturnedBody"
+        },
+        {
+          "text": "In the `releaseWhenSettled` function, what does the `keep` parameter do, and how is it used?",
+          "file": "source/core/Ky.ts",
+          "symbol": "releaseWhenSettled"
+        },
+        {
+          "text": "What is the purpose of the `createTextDecoder` function, and how does it handle different content types?",
+          "file": "source/core/Ky.ts",
+          "symbol": "createTextDecoder"
+        },
+        {
+          "text": "In the `validateAndMerge` function, what is the role of the `sources` parameter, and how does it handle non-object inputs?",
+          "file": "source/utils/merge.ts",
+          "symbol": "validateAndMerge"
+        },
+        {
+          "text": "What is the purpose of the `mergeHeaders` function, and how does it handle deletion markers from the second source?",
+          "file": "source/utils/merge.ts",
+          "symbol": "mergeHeaders"
+        },
+        {
+          "text": "In the `RequestHttpMethod` type, what are the valid HTTP methods, and how are they handled in the `normalizeRequestMethod` function?",
+          "file": "source/types/options.ts",
+          "symbol": "RequestHttpMethod"
+        },
+        {
+          "text": "In the `RetryTimingHeader` type, what are the properties and how are they used in the `getRetryTimingHeader` function?",
+          "file": "source/core/retry-timing.ts",
+          "symbol": "RetryTimingHeader"
+        }
+      ]
+    },
+    {
+      "repo": "expressjs/express",
+      "commit": "0dee2c52c7c873498f8ed7d8ee4ddd0a04d3ada8",
+      "asked": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
+      "dropped": [],
+      "questions": [
+        {
+          "text": "In `lib/response.js`, why is the `status` method throwing an error if the status code is not an integer?",
+          "file": "lib/response.js"
+        },
+        {
+          "text": "In `lib/response.js`, why does the `links` method set the `Link` header by appending to an existing header if it exists?",
+          "file": "lib/response.js"
+        },
+        {
+          "text": "In `lib/response.js`, why does the `send` method check if the body is a string and then determine the content type?",
+          "file": "lib/response.js"
+        },
+        {
+          "text": "In `lib/application.js`, why does the `init` method initialize the cache and engines properties as empty objects?",
+          "file": "lib/application.js"
+        },
+        {
+          "text": "In `lib/application.js`, why does the `defaultConfiguration` method set default values for various settings, including 'x-powered-by', 'etag', 'env', 'query parser', 'subdomain offset', and 'trust proxy'?",
+          "file": "lib/application.js"
+        },
+        {
+          "text": "In `lib/application.js`, why does the `handle` method set the `powered-by` header if the 'x-powered-by' setting is enabled?",
+          "file": "lib/application.js"
+        },
+        {
+          "text": "In `lib/utils.js`, why does the `normalizeType` method normalize a type by checking if it contains a '/' and then applying the `acceptParams` function if it does, or returning a default MIME type if it doesn't?",
+          "file": "lib/utils.js"
+        },
+        {
+          "text": "In `lib/request.js`, why does the `accepts` method return the result of calling `accepts` with the `req` object?",
+          "file": "lib/request.js"
+        }
+      ]
+    },
+    {
+      "repo": "pallets/click",
+      "commit": "2247b35ea1c47c727d7a06e51fa280e12a863ff6",
+      "asked": 8,
+      "strict": 6,
+      "fair": 6,
+      "rescued": [],
+      "dropped": [
+        "symbol not found: _parse_args",
+        "symbol not found: _check_iter"
+      ],
+      "questions": [
+        {
+          "text": "In the `make_progressbar` class, how is the initial position of the progress bar calculated? Provide a code excerpt from the relevant file and symbol.",
+          "file": "src/click/_termui_impl.py",
+          "symbol": "__init__"
+        },
+        {
+          "text": "In the `_check_nested_chain` method of the `Core` class, what is the purpose of the `register` parameter? Provide a code excerpt from the relevant file and symbol.",
+          "file": "src/click/core.py",
+          "symbol": "_check_nested_chain"
+        },
+        {
+          "text": "In the `_complete_visible_commands` method of the `Core` class, how does it handle cases where the `base_command` is not a group or is in chain mode? Provide a code excerpt from the relevant file and symbol.",
+          "file": "src/click/core.py",
+          "symbol": "_complete_visible_commands"
+        },
+        {
+          "text": "In the `_process_opts` method of the `Parser` class, how does it handle options that have nargs set to `None`? Provide a code excerpt from the relevant file and symbol.",
+          "file": "src/click/parser.py",
+          "symbol": "_process_opts"
+        },
+        {
+          "text": "In the `__enter__` method of the `ProgressBar` class, how does it handle cases where the `entered` attribute is not set? Provide a code excerpt from the relevant file and symbol.",
+          "file": "src/click/_termui_impl.py",
+          "symbol": "__enter__"
+        }
+      ]
+    },
+    {
+      "repo": "spf13/cobra",
+      "commit": "adbc8813901bba65827259daa8e22ff94ec1f30e",
+      "asked": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
+      "dropped": [],
+      "questions": [
+        {
+          "text": "How does the `FParseErrWhitelist` type in the `command.go` file relate to parsing command-line arguments?",
+          "file": "command.go",
+          "symbol": "FParseErrWhitelist"
+        },
+        {
+          "text": "Can you explain how the `Group` struct in the `command.go` file manages command groups and what is its purpose?",
+          "file": "command.go",
+          "symbol": "Group"
+        },
+        {
+          "text": "What is the purpose of the `Command` struct in the `command.go` file, and what are some recommended usage patterns for it?",
+          "file": "command.go",
+          "symbol": "Command"
+        },
+        {
+          "text": "What is the `ShellCompDirectiveError` constant defined in the `completions.go` file, and what does it mean when a shell completion function returns this directive?",
+          "file": "completions.go",
+          "symbol": "ShellCompDirectiveError"
+        },
+        {
+          "text": "How does the `writePreamble` function in the `bash_completions.go` file modify a given buffer for Bash completion scripts?",
+          "file": "bash_completions.go",
+          "symbol": "writePreamble"
+        },
+        {
+          "text": "What is the purpose of the `MarkFlagRequired` function in the `shell_completions.go` file, and how does it differ between regular flags and persistent flags?",
+          "file": "shell_completions.go",
+          "symbol": "MarkFlagRequired"
+        },
+        {
+          "text": "What is the role of the `AppendActiveHelp` function in the `active_help.go` file, and how is it used within the Cobra library?",
+          "file": "active_help.go",
+          "symbol": "AppendActiveHelp"
+        },
+        {
+          "text": "How does the `genFishComp` function in the `fish_completions.go` file generate fish completion scripts, and what is its significance in the Cobra library's command completion support?",
+          "file": "fish_completions.go",
+          "symbol": "genFishComp"
+        }
+      ]
+    },
+    {
+      "repo": "sharkdp/hyperfine",
+      "commit": "c5161524980522320c7d3425e714cc0965a869a5",
+      "asked": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
+      "dropped": [],
+      "questions": [
+        {
+          "text": "In src/command.rs, what is the purpose of the `environment` field on the `Command` struct, and how does it differ from other fields like `name` and `expression`?",
+          "file": "src/command.rs"
+        },
+        {
+          "text": "In src/metric.rs, what are the default units for each metric and how are they formatted in the `display_unit` method?",
+          "file": "src/metric.rs"
+        },
+        {
+          "text": "In src/options.rs, what is the purpose of the `platform_default` method and how does it differ from the `parse_from_str` method?",
+          "file": "src/options.rs"
+        },
+        {
+          "text": "In src/benchmark/executor.rs, what is the purpose of the `run_intermediate_command_and_measure` method and how does it handle different types of output policies?",
+          "file": "src/benchmark/executor.rs"
+        },
+        {
+          "text": "In src/quantity/statistics.rs, what is the difference between the `mean` and `mean_f64` functions, and when should each be used?",
+          "file": "src/quantity/statistics.rs"
+        },
+        {
+          "text": "In src/parameter/range_step.rs, what are the conditions under which a `RangeStep` error is returned and how are they handled in the `new` method?",
+          "file": "src/parameter/range_step.rs"
+        },
+        {
+          "text": "In src/shell_syntax.rs, what are the conditions under which the `starts_with_assignment` method returns true and how does it handle quoted input?",
+          "file": "src/shell_syntax.rs"
+        },
+        {
+          "text": "In src/export/markup.rs, what is the purpose of the `table_results` method and how does it format the table based on the cell alignments?",
+          "file": "src/export/markup.rs"
+        }
+      ]
+    },
+    {
+      "repo": "jhy/jsoup",
+      "commit": "4cf664cdb2e9d2cc2d40fdf3bb9c0be0be22f865",
+      "asked": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
+      "dropped": [],
+      "questions": [
+        {
+          "text": "In the `HttpConnection` class, what is the purpose of the `connect` method that accepts a `String` URL?",
+          "file": "src/main/java/org/jsoup/helper/HttpConnection.java",
+          "symbol": "connect"
+        },
+        {
+          "text": "What is the default user-agent string used in `HttpConnection`?",
+          "file": "src/main/java/org/jsoup/helper/HttpConnection.java",
+          "symbol": "DEFAULT_UA"
+        },
+        {
+          "text": "What is the purpose of the `encodeMimeName` method in the `HttpConnection` class?",
+          "file": "src/main/java/org/jsoup/helper/HttpConnection.java",
+          "symbol": "encodeMimeName"
+        },
+        {
+          "text": "What is the purpose of the `validateMimeContentType` method in the `HttpConnection` class?",
+          "file": "src/main/java/org/jsoup/helper/HttpConnection.java",
+          "symbol": "validateMimeContentType"
+        },
+        {
+          "text": "What is the purpose of the `newRequest` method in the `HttpConnection` class?",
+          "file": "src/main/java/org/jsoup/helper/HttpConnection.java",
+          "symbol": "newRequest"
+        },
+        {
+          "text": "What is the purpose of the `checkCapacity` method in the `Attributes` class?",
+          "file": "src/main/java/org/jsoup/nodes/Attributes.java",
+          "symbol": "checkCapacity"
+        },
+        {
+          "text": "What is the purpose of the `visibleIndex` method in the `Attributes` class?",
+          "file": "src/main/java/org/jsoup/nodes/Attributes.java",
+          "symbol": "visibleIndex"
+        },
+        {
+          "text": "What is the purpose of the `parseSelector` method in the `QueryParser` class?",
+          "file": "src/main/java/org/jsoup/select/QueryParser.java",
+          "symbol": "parseSelector"
+        }
+      ]
+    },
+    {
+      "repo": "DaveGamble/cJSON",
+      "commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c",
+      "asked": 8,
+      "strict": 1,
+      "fair": 7,
+      "rescued": [
+        "path-suffix: tests/cjson_add.c › failing_malloc",
+        "path-suffix: tests/unity/src/unity.c › UNITY_FAIL_AND_BAIL",
+        "path-suffix: tests/unity/src/unity_internals.h › UNITY_PTR_TO_INT",
+        "path-suffix: tests/unity/src/unity.h › UNITY_FRAMEWORK_H",
+        "path-suffix: tests/unity/extras/fixture/src/unity_fixture.c › announceTestRun",
+        "path-suffix: tests/unity/extras/fixture/src/unity_fixture.c › UnityMain"
+      ],
+      "dropped": [
+        "symbol not found: UNITY_FAIL_MESSAGE"
+      ],
+      "questions": [
+        {
+          "text": "What is the purpose of the `#define _CRT_SECURE_NO_DEPRECATE` directive in the cJSON library files?",
+          "file": "cJSON.c",
+          "symbol": "_CRT_SECURE_NO_DEPRECATE"
+        },
+        {
+          "text": "How can I handle memory allocation failures in the cJSON library when using the `failing_malloc` function?",
+          "file": "tests/cjson_add.c",
+          "symbol": "failing_malloc"
+        },
+        {
+          "text": "What is the default behavior of the `Unity` framework when a test fails or is ignored?",
+          "file": "tests/unity/src/unity.c",
+          "symbol": "UNITY_FAIL_AND_BAIL"
+        },
+        {
+          "text": "What macros are used to define pointer to integer and display style for pointers in the `unity_internals.h` header file?",
+          "file": "tests/unity/src/unity_internals.h",
+          "symbol": "UNITY_PTR_TO_INT"
+        },
+        {
+          "text": "How can I check if the `UNITY_FRAMEWORK_H` macro is defined in the `unity.h` header file?",
+          "file": "tests/unity/src/unity.h",
+          "symbol": "UNITY_FRAMEWORK_H"
+        },
+        {
+          "text": "What function is used to announce the start of a test run in the `unity_fixture.c` file?",
+          "file": "tests/unity/extras/fixture/src/unity_fixture.c",
+          "symbol": "announceTestRun"
+        },
+        {
+          "text": "What is the main function in the `unity_fixture.c` file responsible for processing command line options and running tests?",
+          "file": "tests/unity/extras/fixture/src/unity_fixture.c",
+          "symbol": "UnityMain"
+        }
+      ]
+    },
+    {
+      "repo": "sinatra/sinatra",
+      "commit": "cb22afd7902b566b6eaba6c4ea89739494a65d12",
+      "asked": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
+      "dropped": [],
+      "questions": [
+        {
+          "text": "In `lib/sinatra/base.rb`, the `Request` class has a method `accept?` that checks if a specific media type is acceptable based on the `HTTP_ACCEPT` header. How does this method work? Provide the code snippet for `accept?` in `lib/sinatra/base.rb`.",
+          "file": "lib/sinatra/base.rb",
+          "symbol": "accept?"
+        },
+        {
+          "text": "How does the `Jar` class in `sinatra-contrib/lib/sinatra/cookies.rb` handle cookies? Explain its role in managing and retrieving cookies in a Sinatra application.",
+          "file": "sinatra-contrib/lib/sinatra/cookies.rb",
+          "symbol": "Jar"
+        },
+        {
+          "text": "In `sinatra-contrib/lib/sinatra/reloader.rb`, the `Reloader` class defines a `Watcher` class to monitor files for changes. What are the attributes of the `Element` class within the `Watcher` class, and how are they used?",
+          "file": "sinatra-contrib/lib/sinatra/reloader.rb",
+          "symbol": "Element"
+        },
+        {
+          "text": "The `Namespace` class in `sinatra-contrib/lib/sinatra/namespace.rb` is designed to handle namespaces in a Sinatra application. How does it extend and include different modules to manage routes, filters, and helpers within a namespace?",
+          "file": "sinatra-contrib/lib/sinatra/namespace.rb",
+          "symbol": "Namespace"
+        },
+        {
+          "text": "In `lib/sinatra/indifferent_hash.rb`, the `IndifferentHash` class provides a way to handle hash keys in a case-insensitive manner. How does this class implement this behavior, and what is the `default` method used for in the context of `IndifferentHash`?",
+          "file": "lib/sinatra/indifferent_hash.rb",
+          "symbol": "default"
+        },
+        {
+          "text": "How does the `Streaming` module in `sinatra-contrib/lib/sinatra/streaming.rb` enhance the behavior of a stream object in a Sinatra application? Specifically, what methods and attributes does it add to the stream object?",
+          "file": "sinatra-contrib/lib/sinatra/streaming.rb",
+          "symbol": "Streaming"
+        },
+        {
+          "text": "The `AuthenticityToken` class in `rack-protection/lib/rack/protection/authenticity_token.rb` is used to prevent CSRF attacks. How does it handle requests that include a CSRF token, and what are the default options available for this class?",
+          "file": "rack-protection/lib/rack/protection/authenticity_token.rb",
+          "symbol": "AuthenticityToken"
+        },
+        {
+          "text": "The `Base` class in `rack-protection/lib/rack/protection/base.rb` is a base class for all protection middlewares. How does it manage options and how are these options utilized by subclasses?",
+          "file": "rack-protection/lib/rack/protection/base.rb",
+          "symbol": "Base"
+        }
+      ]
+    },
+    {
+      "repo": "guzzle/guzzle",
+      "commit": "b920e5fcaf81d761b8fabe600ca90999beaefdb7",
+      "asked": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
+      "dropped": [],
+      "questions": [
+        {
+          "text": "What is the purpose of the `CurlFactory` class in the Guzzle library?",
+          "file": "src/Handler/CurlFactory.php"
+        },
+        {
+          "text": "How does the `CurlFactory` class ensure that the proxy credential cURL options are treated safely?",
+          "file": "src/Handler/CurlFactory.php"
+        },
+        {
+          "text": "What is the purpose of the `StreamHandler` class in the Guzzle library?",
+          "file": "src/Handler/StreamHandler.php"
+        },
+        {
+          "text": "What are the known constructor options for the `StreamHandler` class?",
+          "file": "src/Handler/StreamHandler.php"
+        },
+        {
+          "text": "What is the purpose of the `CurlMultiHandler` class in the Guzzle library?",
+          "file": "src/Handler/CurlMultiHandler.php"
+        },
+        {
+          "text": "What are the known constructor options for the `CurlMultiHandler` class?",
+          "file": "src/Handler/CurlMultiHandler.php"
+        },
+        {
+          "text": "What is the purpose of the `Client` class in the Guzzle library?",
+          "file": "src/Client.php"
+        },
+        {
+          "text": "What are the default request options that can be configured for a client?",
+          "file": "src/Client.php"
+        }
+      ]
+    },
+    {
+      "repo": "App-vNext/Polly",
+      "commit": "3f3adad9d5af85658fc3585018f02a2d8c2173e8",
+      "asked": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
+      "dropped": [],
+      "questions": [
+        {
+          "text": "What is the purpose of the `CircuitStateController` class and how does it manage the circuit state?",
+          "file": "src/Polly.Core/CircuitBreaker/Controller/CircuitStateController.cs",
+          "symbol": "CircuitStateController"
+        },
+        {
+          "text": "How does the `IsolateCircuitAsync` method work and what happens when the circuit is manually isolated?",
+          "file": "src/Polly.Core/CircuitBreaker/Controller/CircuitStateController.cs",
+          "symbol": "IsolateCircuitAsync"
+        },
+        {
+          "text": "What is the logic behind the `BreakFor_NeedsLock` method and how does it prevent overflow when calculating the break duration?",
+          "file": "src/Polly/CircuitBreaker/CircuitStateController.cs",
+          "symbol": "BreakFor_NeedsLock"
+        },
+        {
+          "text": "What is the `HedgingExecutionContext` class used for and how does it manage the execution of tasks and outcomes?",
+          "file": "src/Polly.Core/Hedging/Controller/HedgingExecutionContext.cs",
+          "symbol": "HedgingExecutionContext"
+        },
+        {
+          "text": "How does the `GlobalSetup` method in the `Cache` class initialize the cache policies for synchronous and asynchronous hits and misses?",
+          "file": "bench/Polly.Benchmarks/Cache.cs",
+          "symbol": "GlobalSetup"
+        },
+        {
+          "text": "What is the purpose of the `AllowNullAttribute`, `DisallowNullAttribute`, `MaybeNullAttribute`, `NotNullAttribute`, `MaybeNullWhenAttribute`, `NotNullWhenAttribute`, `NotNullIfNotNullAttribute`, `DoesNotReturnAttribute`, `DoesNotReturnIfAttribute`, `MemberNotNullAttribute`, and `MemberNotNullWhenAttribute` attributes in the `LegacySupport` class?",
+          "file": "src/LegacySupport/NullableAttributes.cs"
+        },
+        {
+          "text": "How does the `RetrySyntax` class handle retrying policies, and what are the differences between `Retry` and `RetryAsync` methods?",
+          "file": "src/Polly/Retry/RetrySyntax.cs"
+        },
+        {
+          "text": "What is the purpose of the `ReloadableComponent` class and how does it handle reloading and disposing of components in a pipeline?",
+          "file": "src/Polly.Core/Utils/Pipeline/ReloadableComponent.cs",
+          "symbol": "ReloadableComponent"
+        }
+      ]
+    }
+  ]
+}

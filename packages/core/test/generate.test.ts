@@ -44,13 +44,22 @@ describe("buildPrompt", () => {
     expect(schema).toMatchObject({ type: "object", required: ["questions"] });
   });
 
-  it("shows source files before test files", () => {
+  it("shows source files before tests, scripts and seed files", () => {
     const r = mkdtempSync(join(tmpdir(), "ri-tests-"));
     mkdirSync(join(r, "test"));
+    mkdirSync(join(r, "scripts"));
     writeFileSync(join(r, "test", "a.test.ts"), "function t1() {}\nfunction t2() {}\nfunction t3() {}\n");
+    writeFileSync(join(r, "scripts", "seed-demo-data.ts"), "function s1() {}\nfunction s2() {}\nfunction s3() {}\n");
     writeFileSync(join(r, "core.ts"), "export function run() {}\n");
     const { prompt } = buildPrompt(scanRepo(r));
     expect(prompt.indexOf("core.ts")).toBeLessThan(prompt.indexOf("test/a.test.ts"));
+    expect(prompt.indexOf("core.ts")).toBeLessThan(prompt.indexOf("scripts/seed-demo-data.ts"));
+  });
+
+  it("tells the model to avoid trivia and repeated symbols", () => {
+    const { system } = buildPrompt(scanRepo(root));
+    expect(system).toMatch(/trivia/);
+    expect(system).toMatch(/at most once/);
   });
 
   it("keeps excerpts within the character budget", () => {
@@ -75,6 +84,18 @@ describe("generateQuestions", () => {
     const { kept, dropped } = await generateQuestions(scanRepo(root), provider, { count: 3 });
     expect(kept.map((q) => q.symbol)).toEqual(["retry"]);
     expect(dropped.map((v) => v.reason)).toEqual(["symbol not found: ghost", "file not found: b.ts"]);
+  });
+
+  it("shows one question per cited symbol, without changing the counts", async () => {
+    const provider = stub(
+      JSON.stringify([
+        { text: "Why retry?", file: "a.ts", symbol: "retry" },
+        { text: "Why retry again?", file: "a.ts", symbol: "retry" },
+      ]),
+    );
+    const result = await generateQuestions(scanRepo(root), provider);
+    expect(result.kept.map((q) => q.text)).toEqual(["Why retry?"]);
+    expect(result).toMatchObject({ asked: 2, strictKept: 2, fairKept: 2 });
   });
 });
 

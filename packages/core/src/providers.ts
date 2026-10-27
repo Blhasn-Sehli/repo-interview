@@ -97,7 +97,9 @@ const patientFetch = ((url: string, init: RequestInit) =>
       res.on("end", () => resolveRes(new Response(Buffer.concat(chunks), { status: res.statusCode })));
       res.on("error", reject);
     });
-    req.on("error", reject);
+    req.on("error", (err: NodeJS.ErrnoException) =>
+      reject(err.code === "ECONNREFUSED" ? new Error(`cannot reach Ollama at ${new URL(url).origin}; start the Ollama app and try again`) : err),
+    );
     req.end(init.body as string);
   })) as typeof fetch;
 

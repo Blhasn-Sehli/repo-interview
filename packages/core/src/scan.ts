@@ -10,6 +10,9 @@ type Pattern = [kind: string, re: RegExp];
 
 const MODS = "(?:(?:public|private|protected|internal|static|final|abstract|sealed|partial|open|data|override|virtual|async|synchronized|readonly)\\s+)";
 
+const TS_MODS = "(?:(?:public|private|protected|static|async|readonly|override|abstract)\\s+)";
+const NOT_KEYWORD = "(?!(?:if|for|while|switch|catch|return|function|constructor|super|new|await|typeof)\\b)";
+
 // Regex symbol lookup, one match per line. Good enough for candidates; tree-sitter replaces it later.
 const PATTERNS: Record<string, Pattern[]> = {
   typescript: [
@@ -21,6 +24,11 @@ const PATTERNS: Record<string, Pattern[]> = {
     ["function", /^\s*(?:export\s+)?(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*(?:async\s*)?(?:\(|function|[A-Za-z_$][\w$]*\s*=>)/],
     // `res.send = function send(...)`, common in older JS such as express
     ["function", /^\s*[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*\.([A-Za-z_$][\w$]*)\s*=\s*(?:async\s+)?function\b/],
+    // class methods, where NestJS and most TS apps keep their logic: `  async placeBid(id) {`
+    // (parameters with quotes or `function` are calls such as `it('works', function () {`, not definitions)
+    ["method", new RegExp(`^\\s+${TS_MODS}*(?:get\\s+|set\\s+)?${NOT_KEYWORD}([A-Za-z_$][\\w$]*)\\s*(?:<[^>]*>)?\\s*\\((?![^)]*(?:['"\`]|\\bfunction\\b))[^)]*\\)\\s*(?::\\s*[^{=;]+)?\\{`)],
+    // ...and methods whose parameters continue on the next lines: `  async create(`
+    ["method", new RegExp(`^\\s+${TS_MODS}+(?:get\\s+|set\\s+)?${NOT_KEYWORD}([A-Za-z_$][\\w$]*)\\s*(?:<[^>]*>)?\\s*\\($`)],
   ],
   python: [
     ["function", /^\s*(?:async\s+)?def\s+([A-Za-z_]\w*)/],
