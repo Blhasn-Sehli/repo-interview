@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { extname, join, relative, sep } from "node:path";
+import { extractWithTreeSitter } from "./treesitter.js";
 
 export interface SymbolInfo { name: string; kind: string; line: number }
 export interface FileInfo { path: string; language: string; lines: number; symbols: SymbolInfo[] }
@@ -122,7 +123,7 @@ export function scanRepo(root: string, opts: ScanOptions = {}): ScanResult {
         path: relative(root, full).split(sep).join("/"),
         language,
         lines: src.split(/\r?\n/).length,
-        symbols: extractSymbols(language, src),
+        symbols: extractWithTreeSitter(full, src) ?? extractSymbols(language, src),
       });
     }
   };

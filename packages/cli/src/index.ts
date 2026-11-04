@@ -8,6 +8,7 @@ import {
   RecordedProvider,
   renderReport,
   runInterview,
+  loadParsers,
   scanRepo,
   scoreAnswer,
   type GenerateOptions,
@@ -109,6 +110,7 @@ async function main(argv: string[]): Promise<number> {
     console.log(USAGE);
     return values.help ? 0 : 1;
   }
+  await loadParsers();
   const scan = scanRepo(resolve(path));
 
   if (command === "scan") {

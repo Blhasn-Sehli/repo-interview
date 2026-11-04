@@ -6,7 +6,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
-import { anthropic, generateQuestions, ollama, openAICompatible, RecordedProvider, scanRepo } from "../packages/core/dist/index.js";
+import { anthropic, generateQuestions, ollama, openAICompatible, loadParsers, RecordedProvider, scanRepo } from "../packages/core/dist/index.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const { values } = parseArgs({
@@ -32,6 +32,7 @@ function makeProvider() {
   return new RecordedProvider(join(here, "recordings"), real);
 }
 
+await loadParsers();
 const provider = makeProvider();
 const entries = JSON.parse(readFileSync(join(here, "corpus.json"), "utf8"));
 const rows = [];

@@ -18,6 +18,7 @@ const {
   readQuestionsFromComment,
   renderPrComment,
   renderScoreComment,
+  loadParsers,
   scanRepo,
   scoreAnswer,
 } = core;
@@ -111,6 +112,7 @@ async function scoreReply(event) {
 }
 
 try {
+  await loadParsers();
   const event = JSON.parse(readFileSync(env.GITHUB_EVENT_PATH, "utf8"));
   if (env.GITHUB_EVENT_NAME === "issue_comment") await scoreReply(event);
   else await askQuestions(event);
