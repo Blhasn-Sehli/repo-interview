@@ -15,7 +15,29 @@ Early, rough edges expected. What works today:
 
 Measured so far: on 10 public repos with a small local model, 91.3% of questions cite real code under both the strict and the fair check ([details](corpus/README.md#results)). Grading quality has not been measured yet; with small local models it is rough.
 
-Not built yet: the PR gate Action, tree-sitter symbol lookup, multi-line answers.
+Not built yet: scoring the author's reply to the PR comment, tree-sitter symbol lookup, multi-line answers.
+
+## On pull requests (GitHub Action)
+
+Posts one comment with 3 questions about the PR's own change. It runs a small model with Ollama on the GitHub runner: free, no API key, and the code stays on the runner. It is advisory and never fails the PR.
+
+```yaml
+name: PR questions
+on: pull_request
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  questions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+      - uses: Blhasn-Sehli/repo-interview@main
+```
+
+On this repo's first run the whole step, including installing Ollama and downloading the model, took 86 seconds, of which the model took 45. Pull requests from forks get a read-only token, so their questions go to the job summary instead of a comment.
 
 ## Try it
 

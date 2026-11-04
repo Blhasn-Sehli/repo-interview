@@ -22,7 +22,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v7
       with:
         node-version: 22
 
@@ -35,7 +35,7 @@ runs:
         pnpm build
 
     - name: Restore Ollama and model cache
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: |
           ~/.ollama-bin
