@@ -1,0 +1,530 @@
+{
+  "summary": {
+    "provider": "recording:ollama:qwen2.5-coder:3b",
+    "date": "2026-11-04",
+    "repos": 10,
+    "asked": 80,
+    "strict": 69,
+    "fair": 72,
+    "strictShare": 0.8625,
+    "fairShare": 0.9
+  },
+  "rows": [
+    {
+      "repo": "sindresorhus/ky",
+      "commit": "3541888878c4d303a8bc2ad61815f4e048f55a5d",
+      "asked": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
+      "dropped": [],
+      "questions": [
+        {
+          "text": "What does Ky do and what are its main features?",
+          "file": "README.md",
+          "kind": "overview"
+        },
+        {
+          "text": "How does Ky handle different types of inputs and what are the options available for each?",
+          "file": "source/types/options.ts",
+          "kind": "overview"
+        },
+        {
+          "text": "How does Ky handle retries and timeouts, and what options are available for customizing retry behavior?",
+          "file": "source/core/retry-timing.ts",
+          "kind": "overview"
+        },
+        {
+          "text": "How does the `raceWithTimeout` function work, and what is its purpose?",
+          "file": "source/core/Ky.ts",
+          "symbol": "raceWithTimeout",
+          "kind": "code"
+        },
+        {
+          "text": "What is the `cancelReturnedBody` function used for, and how does it work?",
+          "file": "source/core/Ky.ts",
+          "symbol": "cancelReturnedBody",
+          "kind": "code"
+        },
+        {
+          "text": "How does the `releaseWhenSettled` function work, and what is its purpose?",
+          "file": "source/core/Ky.ts",
+          "symbol": "releaseWhenSettled",
+          "kind": "code"
+        },
+        {
+          "text": "What is the `getErrorDataTimeout` function used for, and how does it work?",
+          "file": "source/core/Ky.ts",
+          "symbol": "getErrorDataTimeout",
+          "kind": "code"
+        },
+        {
+          "text": "How does the `createTextDecoder` function work, and what is its purpose?",
+          "file": "source/core/Ky.ts",
+          "symbol": "createTextDecoder",
+          "kind": "code"
+        }
+      ]
+    },
+    {
+      "repo": "expressjs/express",
+      "commit": "0dee2c52c7c873498f8ed7d8ee4ddd0a04d3ada8",
+      "asked": 8,
+      "strict": 7,
+      "fair": 7,
+      "rescued": [],
+      "dropped": [
+        "file not found: lib/router.js"
+      ],
+      "questions": [
+        {
+          "text": "Can you explain the main components of the Express.js application and how they interact?",
+          "file": "lib/application.js",
+          "symbol": "init",
+          "kind": "overview"
+        },
+        {
+          "text": "How does Express.js handle errors, and what is the role of middleware in this process?",
+          "file": "lib/application.js",
+          "symbol": "error",
+          "kind": "overview"
+        },
+        {
+          "text": "Explain how the `set` method works in Express.js, and provide an example of its usage.",
+          "file": "lib/application.js",
+          "symbol": "set",
+          "kind": "code"
+        },
+        {
+          "text": "How does the `listen` method in Express.js work, and what options can be provided to customize the server behavior?",
+          "file": "lib/application.js",
+          "symbol": "listen",
+          "kind": "code"
+        },
+        {
+          "text": "What are the various methods available in the `req` object and how can they be used to retrieve information about the incoming request?",
+          "file": "lib/request.js",
+          "symbol": "header",
+          "kind": "code"
+        },
+        {
+          "text": "How does the `send` method work in Express.js, and provide an example of its usage.",
+          "file": "lib/response.js",
+          "symbol": "send",
+          "kind": "code"
+        },
+        {
+          "text": "What are the different types of middleware available in Express.js and how can they be used?",
+          "file": "lib/application.js",
+          "symbol": "use",
+          "kind": "code"
+        }
+      ]
+    },
+    {
+      "repo": "pallets/click",
+      "commit": "2247b35ea1c47c727d7a06e51fa280e12a863ff6",
+      "asked": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
+      "dropped": [],
+      "questions": [
+        {
+          "text": "What is the purpose of the `_complete_visible_commands` function in Click, and how does it work?",
+          "file": "src/click/core.py",
+          "kind": "overview"
+        },
+        {
+          "text": "Explain the purpose of the `_check_nested_chain` function in Click and what is the context in which it is called?",
+          "file": "src/click/core.py",
+          "kind": "overview"
+        },
+        {
+          "text": "What is the role of the `_echo_aborted` function in Click, and when is it typically used?",
+          "file": "src/click/core.py",
+          "kind": "overview"
+        },
+        {
+          "text": "How does the `ParamTypeInfoDict` class in Click define and structure its information about parameter types and names?",
+          "file": "src/click/types.py",
+          "kind": "code"
+        },
+        {
+          "text": "Describe how the `ParamType` class in Click is implemented and what are the key methods and attributes it contains?",
+          "file": "src/click/types.py",
+          "kind": "code"
+        },
+        {
+          "text": "What does the `__class_getitem__` method in the `ParamType` class do, and how is it used?",
+          "file": "src/click/types.py",
+          "kind": "code"
+        },
+        {
+          "text": "Explain the purpose and functionality of the `_make_text_stream` function in Click and how it deals with binary streams and encodings?",
+          "file": "src/click/_compat.py",
+          "kind": "code"
+        },
+        {
+          "text": "What does the `ProgressBar` class in Click do, and how is it used to create a progress bar for iterable data processing?",
+          "file": "src/click/_termui_impl.py",
+          "kind": "code"
+        }
+      ]
+    },
+    {
+      "repo": "spf13/cobra",
+      "commit": "adbc8813901bba65827259daa8e22ff94ec1f30e",
+      "asked": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
+      "dropped": [],
+      "questions": [
+        {
+          "text": "What is the primary purpose of the `Command` struct in Cobra, and how does it facilitate the creation of powerful modern CLI applications?",
+          "file": "command.go",
+          "symbol": "Command",
+          "kind": "overview"
+        },
+        {
+          "text": "How does Cobra manage flags and how do they interact with each other and with subcommands?",
+          "file": "flag_groups.go",
+          "symbol": "MarkFlagsRequiredTogether",
+          "kind": "overview"
+        },
+        {
+          "text": "In the `CmdNameCompletionInGo` test, what is the purpose of the `rootCmd` variable and how does it interact with the `childCmd1` and `childCmd2` variables?",
+          "file": "completions_test.go",
+          "symbol": "rootCmd",
+          "kind": "code"
+        },
+        {
+          "text": "What is the purpose of the `validOnlyWithInvalidArgs` function in the `args_test.go` file, and how does it ensure that the `CmdNameCompletionInGo` test works as expected?",
+          "file": "args_test.go",
+          "symbol": "validOnlyWithInvalidArgs",
+          "kind": "code"
+        },
+        {
+          "text": "How does the `ShellCompDirectiveError` constant in the `completions.go` file affect the shell completion behavior for Cobra commands?",
+          "file": "completions.go",
+          "symbol": "ShellCompDirectiveError",
+          "kind": "code"
+        },
+        {
+          "text": "What is the purpose of the `MarkPersistentFlagRequired` function in the `shell_completions.go` file, and how does it ensure that a persistent flag is required when the command is executed?",
+          "file": "shell_completions.go",
+          "symbol": "MarkPersistentFlagRequired",
+          "kind": "code"
+        },
+        {
+          "text": "How does the `MarkFlagCustom` function in the `shell_completions.go` file allow users to register custom bash functions for completion of a specific flag in Cobra commands?",
+          "file": "shell_completions.go",
+          "symbol": "MarkFlagCustom",
+          "kind": "code"
+        }
+      ]
+    },
+    {
+      "repo": "sharkdp/hyperfine",
+      "commit": "c5161524980522320c7d3425e714cc0965a869a5",
+      "asked": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
+      "dropped": [],
+      "questions": [
+        {
+          "text": "Could you explain the purpose of the `Command` struct in the `src/command.rs` file?",
+          "file": "src/command.rs",
+          "symbol": "Command",
+          "kind": "overview"
+        },
+        {
+          "text": "How does hyperfine handle the environment variables for commands when parameterizing them?",
+          "file": "src/command.rs",
+          "symbol": "Environment",
+          "kind": "overview"
+        },
+        {
+          "text": "What is the primary use case of the `Metric` enum in the `src/metric.rs` file?",
+          "file": "src/metric.rs",
+          "symbol": "Metric",
+          "kind": "overview"
+        },
+        {
+          "text": "In the `src/quantity/statistics.rs` file, how does the `mean` function calculate the mean of a set of values?",
+          "file": "src/quantity/statistics.rs",
+          "symbol": "mean",
+          "kind": "code"
+        },
+        {
+          "text": "What is the purpose of the `next` method in the `src/parameter/range_step.rs` file, and how does it work with the `RangeStep` struct?",
+          "file": "src/parameter/range_step.rs",
+          "symbol": "next",
+          "kind": "code"
+        },
+        {
+          "text": "How does the `run_command_and_measure` method in the `src/benchmark/executor.rs` file handle command failures and output policies?",
+          "file": "src/benchmark/executor.rs",
+          "symbol": "run_command_and_measure",
+          "kind": "code"
+        },
+        {
+          "text": "What is the purpose of the `table_results` method in the `src/export/markup.rs` file, and how does it format the benchmark results?",
+          "file": "src/export/markup.rs",
+          "symbol": "table_results",
+          "kind": "code"
+        },
+        {
+          "text": "In the `src/benchmark/scheduler.rs` file, how does the `run_benchmarks` method ensure that each benchmark is executed in the correct order?",
+          "file": "src/benchmark/scheduler.rs",
+          "symbol": "run_benchmarks",
+          "kind": "code"
+        }
+      ]
+    },
+    {
+      "repo": "jhy/jsoup",
+      "commit": "4cf664cdb2e9d2cc2d40fdf3bb9c0be0be22f865",
+      "asked": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
+      "dropped": [],
+      "questions": [
+        {
+          "text": "What is the primary use case for the jsoup library, and how does it differ from other HTML parsing libraries in terms of features and support?",
+          "file": "README.md",
+          "kind": "overview"
+        },
+        {
+          "text": "Can you explain how the jsoup library handles invalid HTML and malformed content, and what strategies it uses to create a sensible parse tree?",
+          "file": "src/test/java/org/jsoup/parser/ParserTest.java",
+          "kind": "overview"
+        },
+        {
+          "text": "What are the key attributes of the Element class in jsoup, and how are they used in different scenarios?",
+          "file": "src/main/java/org/jsoup/nodes/Element.java",
+          "kind": "overview"
+        },
+        {
+          "text": "Explain the purpose and functionality of the `Node` class in jsoup, and how it relates to the `Element` class?",
+          "file": "src/main/java/org/jsoup/nodes/Node.java",
+          "kind": "code"
+        },
+        {
+          "text": "What are the key methods provided by the `Attributes` class in jsoup, and how are they used in parsing and cleaning HTML content?",
+          "file": "src/main/java/org/jsoup/nodes/Attributes.java",
+          "kind": "code"
+        },
+        {
+          "text": "How does the `Document` class in jsoup differ from other HTML parsing libraries, and what features does it provide for manipulating and cleaning HTML content?",
+          "file": "src/main/java/org/jsoup/nodes/Document.java",
+          "kind": "code"
+        },
+        {
+          "text": "Can you explain the purpose and functionality of the `HttpConnection` class in jsoup, and how it is used for making HTTP requests and handling responses?",
+          "file": "src/main/java/org/jsoup/helper/HttpConnection.java",
+          "kind": "code"
+        },
+        {
+          "text": "What are the key methods provided by the `QueryParser` class in jsoup, and how are they used for parsing and evaluating CSS queries?",
+          "file": "src/main/java/org/jsoup/select/QueryParser.java",
+          "kind": "code"
+        }
+      ]
+    },
+    {
+      "repo": "DaveGamble/cJSON",
+      "commit": "6d9f2443ab071f86e5d9b43025a40929ec41c46c",
+      "asked": 8,
+      "strict": 5,
+      "fair": 8,
+      "rescued": [
+        "path-suffix: tests/cjson_add.c",
+        "path-suffix: tests/cjson_add.c",
+        "path-suffix: tests/cjson_add.c"
+      ],
+      "dropped": [],
+      "questions": [
+        {
+          "text": "What is the primary purpose of cJSON, and how does it compare to other JSON parsers?",
+          "file": "cJSON.h",
+          "kind": "overview"
+        },
+        {
+          "text": "What is the role of `CJSON_CDECL` and `CJSON_STDCALL` in the `cJSON.h` file?",
+          "file": "cJSON.h",
+          "kind": "overview"
+        },
+        {
+          "text": "How does the `cJSON` library handle memory allocation and deallocation, and what is the significance of the `failing_malloc` function?",
+          "file": "tests/cjson_add.c",
+          "kind": "overview"
+        },
+        {
+          "text": "Explain how the `cJSON_Print` function handles strings with zero bytes in them.",
+          "file": "cJSON.c",
+          "kind": "code"
+        },
+        {
+          "text": "What is the purpose of the `cJSONUtils_GetPointer` function in the `cJSON_Utils.h` header file?",
+          "file": "cJSON_Utils.h",
+          "kind": "code"
+        },
+        {
+          "text": "How does the `cJSON_AddNullToObject` function ensure that the `null` object is properly initialized and stored in the `cJSON` library?",
+          "file": "tests/cjson_add.c",
+          "kind": "code"
+        },
+        {
+          "text": "Explain how the `cJSON_array_foreach` macro is used to iterate over elements in a cJSON array and what happens if the array is null or empty?",
+          "file": "tests/cjson_add.c",
+          "kind": "code"
+        },
+        {
+          "text": "What is the significance of the `cJSONUtils_strdup` function, and how is it used in the library?",
+          "file": "cJSON_Utils.c",
+          "kind": "code"
+        }
+      ]
+    },
+    {
+      "repo": "sinatra/sinatra",
+      "commit": "cb22afd7902b566b6eaba6c4ea89739494a65d12",
+      "asked": 8,
+      "strict": 8,
+      "fair": 8,
+      "rescued": [],
+      "dropped": [],
+      "questions": [
+        {
+          "text": "What is the main purpose of Sinatra, and how does it differ from other web frameworks like Rails?",
+          "file": "README.md",
+          "kind": "overview"
+        },
+        {
+          "text": "Explain the accept method in Sinatra's Request class. How does it handle different media types and accept headers?",
+          "file": "lib/sinatra/base.rb",
+          "kind": "overview"
+        },
+        {
+          "text": "What is the purpose of the Cookies module in Sinatra-contrib, and how can you access or modify cookies within a request?",
+          "file": "sinatra-contrib/lib/sinatra/cookies.rb",
+          "kind": "overview"
+        },
+        {
+          "text": "How does the AuthenticityToken class in Rack::Protection work to prevent CSRF attacks? What additional methods does it offer besides checking the X-CSRF-Token and POST form data?",
+          "file": "rack-protection/lib/rack/protection/authenticity_token.rb",
+          "kind": "code"
+        },
+        {
+          "text": "How does the CookieTossing class in Rack::Protection handle cookie validation? What options does it offer for customizing its behavior?",
+          "file": "rack-protection/lib/rack/protection/cookie_tossing.rb",
+          "kind": "code"
+        },
+        {
+          "text": "What is the role of the Reloader class in Sinatra-contrib? How does it work to reload modified files in the development environment?",
+          "file": "sinatra-contrib/lib/sinatra/reloader.rb",
+          "kind": "code"
+        },
+        {
+          "text": "Explain how the EngineTracking module in Sinatra-contrib adds engine-specific methods like `erb?`, `erubi?`, and `haml?` to helper methods, and how this is useful for template detection.",
+          "file": "sinatra-contrib/lib/sinatra/engine_tracking.rb",
+          "kind": "code"
+        },
+        {
+          "text": "What are some common error handling techniques in Sinatra, and how do they differ from other web frameworks?",
+          "file": "README.md",
+          "kind": "code"
+        }
+      ]
+    },
+    {
+      "repo": "guzzle/guzzle",
+      "commit": "b920e5fcaf81d761b8fabe600ca90999beaefdb7",
+      "asked": 8,
+      "strict": 6,
+      "fair": 6,
+      "rescued": [],
+      "dropped": [
+        "symbol not found: Guzzle client library",
+        "symbol not found: Guzzle features"
+      ],
+      "questions": [
+        {
+          "text": "What is the relationship between Guzzle and the PSR-7 standard, and how does this allow for interoperability with other PSR-7 compatible libraries?",
+          "file": "README.md",
+          "symbol": "Guzzle and PSR-7",
+          "kind": "overview"
+        },
+        {
+          "text": "Describe the purpose and functionality of the `StreamHandler` class in Guzzle.",
+          "file": "src/Handler/StreamHandler.php",
+          "symbol": "StreamHandler",
+          "kind": "code"
+        },
+        {
+          "text": "Explain how the `CurlFactory` class is used to create and manage cURL handles in Guzzle.",
+          "file": "src/Handler/CurlFactory.php",
+          "symbol": "CurlFactory",
+          "kind": "code"
+        },
+        {
+          "text": "What is the purpose of the `AuthMiddleware` class in Guzzle and how does it handle different types of authentication schemes?",
+          "file": "src/AuthMiddleware.php",
+          "symbol": "AuthMiddleware",
+          "kind": "code"
+        },
+        {
+          "text": "Describe the role of the `ChunkedBodyStream` class in Guzzle and its implementation.",
+          "file": "src/Handler/ChunkedBodyStream.php",
+          "symbol": "ChunkedBodyStream",
+          "kind": "code"
+        },
+        {
+          "text": "What is the purpose of the `CookieJar` class in Guzzle and how it manages cookie data for HTTP requests?",
+          "file": "src/Cookie/CookieJar.php",
+          "symbol": "CookieJar",
+          "kind": "code"
+        }
+      ]
+    },
+    {
+      "repo": "App-vNext/Polly",
+      "commit": "3f3adad9d5af85658fc3585018f02a2d8c2173e8",
+      "asked": 8,
+      "strict": 3,
+      "fair": 3,
+      "rescued": [],
+      "dropped": [
+        "file not found: src/Polly/ResiliencePipeline.cs",
+        "file not found: src/Polly/ResiliencePipeline.cs",
+        "file not found: src/Polly/ResiliencePipeline.cs",
+        "symbol not found: ExecuteAsync",
+        "symbol not found: Execute"
+      ],
+      "questions": [
+        {
+          "text": "What is the primary purpose of the CircuitStateController class in Polly, and how does it manage the lifecycle of a circuit breaker?",
+          "file": "src/Polly.Core/CircuitBreaker/Controller/CircuitStateController.cs",
+          "symbol": "CircuitStateController",
+          "kind": "overview"
+        },
+        {
+          "text": "Explain the role of the CircuitBreakerManualControl class in Polly, and how does it allow manual control over the circuit breaker state?",
+          "file": "src/Polly.Core/CircuitBreaker/CircuitBreakerManualControl.cs",
+          "symbol": "CircuitBreakerManualControl",
+          "kind": "overview"
+        },
+        {
+          "text": "Describe the purpose of the HedgingController class in Polly, and how it helps in mitigating risks by retrying requests to a backup system?",
+          "file": "src/Polly.Core/Hedging/Controller/HedgingController.cs",
+          "symbol": "HedgingController",
+          "kind": "overview"
+        }
+      ]
+    }
+  ]
+}

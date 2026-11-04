@@ -27,15 +27,19 @@ Share of generated questions whose cited file and symbol exist. One run, one sma
 
 | Date | Model | Repos answered | Strict | Fair |
 | --- | --- | --- | --- | --- |
-| 2026-11-04 | ollama `qwen2.5-coder:3b` | 10/10 | 73/80 (91.3%) | 73/80 (91.3%) |
+| 2026-11-04 (c) | ollama `qwen2.5-coder:3b` | 10/10 | 69/80 (86.3%) | 72/80 (90.0%) |
+| 2026-11-04 (b) | ollama `qwen2.5-coder:3b` | 10/10 | 65/80 (81.3%) | 70/80 (87.5%) |
+| 2026-11-04 (a) | ollama `qwen2.5-coder:3b` | 10/10 | 73/80 (91.3%) | 73/80 (91.3%) |
 | 2026-10-27 | ollama `qwen2.5-coder:3b` | 10/10 | 71/80 (88.8%) | 77/80 (96.3%) |
 | 2026-10-23 | ollama `qwen2.5-coder:3b` | 10/10 | 64/80 (80.0%) | 76/80 (95.0%) |
 
-The Oct 27 run uses a newer prompt and scanner (class methods; app code before tests, scripts and seeds; no trivia; each symbol at most once), so the rows are different setups, not repeat measurements. The Nov 4 run asks for 3 big-picture and 5 code questions per repo and shows the model the README. In Polly the model invented plausible file paths 5 times (for example `src/Polly/PolicyRegistry.cs`), in both kinds of question; the verifier dropped all of them, which is why only 2 of 8 Polly questions remain. Known gap: in cJSON the model still asks mostly about the bundled test framework instead of `cJSON.c`.
+The Oct 27 run uses a newer prompt and scanner (class methods; app code before tests, scripts and seeds; no trivia; each symbol at most once), so the rows are different setups, not repeat measurements. Nov 4 (a) asks for 3 big-picture and 5 code questions per repo and shows the model the README; in Polly the model invented plausible file paths 5 times (for example `src/Polly/PolicyRegistry.cs`) and the verifier dropped all of them. Nov 4 (b) adds tree-sitter symbols for TypeScript, JavaScript and Python; only ky and click got a new prompt (the others reused recorded replies), and in ky the model dropped the leading `source/` from every path. Nov 4 (c) also tells the model to copy paths exactly as listed, with every repo asked fresh: ky is back to 8/8, Polly again invented paths (`src/Polly/ResiliencePipeline.cs`), and in guzzle the model put a description where a symbol belongs.
+
+**Runs vary.** Each row is a single sample per repo, and the same setup can move by several points from run to run, so these numbers show the direction, not a precise rate. Published numbers will be the average of several runs. Known gap: in cJSON the model still asks mostly about the bundled test framework instead of `cJSON.c`.
 
 - **Strict:** the path and the symbol text appear exactly as the model wrote them.
 - **Fair:** also accepts a path written without its folders when exactly one repo file ends with it (`unity.h` for `tests/unity/src/unity.h`), and `Class::method` when every part appears in the file.
-- Citations that fail both checks are invented: on Nov 4, six file paths that do not exist and one missing symbol (`RetrySyntax`).
+- Citations that fail both checks are invented: in Nov 4 (c), four file paths that do not exist and four symbols missing from the cited files.
 
 Per-repo details are in [`results/`](results/); the raw model replies are in [`recordings/`](recordings/), so `node corpus/run.mjs --replay corpus/recordings` recomputes both numbers offline.
 

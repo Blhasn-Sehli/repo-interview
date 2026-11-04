@@ -77,6 +77,7 @@ console.log(`  fair (folder-less paths, Class::method): ${summary.fair}/${asked}
 
 if (!ok.length) process.exit(1);
 mkdirSync(join(here, "results"), { recursive: true });
-const out = join(here, "results", `${summary.date}.json`);
+// One file per run (date and time), so a second run on the same day never overwrites the first.
+const out = join(here, "results", `${new Date().toISOString().slice(0, 16).replace(":", "")}.json`);
 writeFileSync(out, JSON.stringify({ summary, rows }, null, 2) + "\n");
 console.log(`saved ${out}`);
