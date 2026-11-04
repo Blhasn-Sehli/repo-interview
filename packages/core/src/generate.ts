@@ -115,9 +115,21 @@ export function parseQuestions(raw: string): Question[] {
 /** Ask the provider for questions, then keep only those whose cited file and symbol exist. */
 export async function generateQuestions(scan: ScanResult, provider: ModelProvider, opts: GenerateOptions = {}): Promise<GenerateResult> {
   const raw = await provider.complete(buildPrompt(scan, opts));
-  const questions = parseQuestions(raw);
-  const strict = verifyQuestions(scan.root, questions);
-  const fair = verifyQuestions(scan.root, questions, { mode: "fair", files: scan.files.map((f) => f.path) });
+  return checkQuestions(scan, parseQuestions(raw));
+}
+
+/**
+ * Run the strict and fair checks. `extra` can reject a citation that exists but is out of scope
+ * (for example, a file a diff did not touch) by returning the reason.
+ */
+export function checkQuestions(scan: ScanResult, questions: Question[], extra?: (q: Question) => string | undefined): GenerateResult {
+  const scoped = (verdicts: Verdict[]) =>
+    verdicts.map((v): Verdict => {
+      const reason = v.ok ? extra?.(v.question) : undefined;
+      return reason ? { question: v.question, ok: false, reason } : v;
+    });
+  const strict = scoped(verifyQuestions(scan.root, questions));
+  const fair = scoped(verifyQuestions(scan.root, questions, { mode: "fair", files: scan.files.map((f) => f.path) }));
   return {
     // One question per cited symbol for the user; the counts below still include repeats.
     kept: fair

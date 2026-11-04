@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import {
   anthropic,
+  generateDiffQuestions,
   generateQuestions,
   ollama,
   openAICompatible,
@@ -11,7 +12,8 @@ import {
   scoreAnswer,
   type ModelProvider,
 } from "@repo-interview/core";
-import { writeFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
 import { basename, resolve } from "node:path";
 import { createInterface } from "node:readline";
 import { parseArgs } from "node:util";
@@ -22,6 +24,8 @@ Usage:
   repo-interview scan <path> [--json]
   repo-interview questions <path> --provider <anthropic|openai|ollama> [options]
   repo-interview interview <path> --provider <anthropic|openai|ollama> [options]
+  repo-interview pr <path> --provider <anthropic|openai|ollama> [--base <ref> | --diff-file <file>] [options]
+      3 questions about only the code changed since <ref> (default main)
 
 Options for questions and interview:
   --model <name>       model id (anthropic default: claude-opus-5-5)
@@ -74,6 +78,8 @@ async function main(argv: string[]): Promise<number> {
       record: { type: "string" },
       replay: { type: "string" },
       out: { type: "string" },
+      base: { type: "string" },
+      "diff-file": { type: "string" },
       help: { type: "boolean", short: "h" },
     },
   });
@@ -107,6 +113,24 @@ async function main(argv: string[]): Promise<number> {
       const repeats = fairKept - result.kept.length;
       console.log(`\n${fairKept}/${asked} pass the fair check, ${strictKept}/${asked} pass the strict check${repeats ? ` (${repeats} repeated symbol${repeats > 1 ? "s" : ""} hidden)` : ""}`);
       for (const v of result.rescued) console.log(`  accepted by ${v.rule}: ${v.question.file}${v.question.symbol ? ` › ${v.question.symbol}` : ""}`);
+      for (const v of result.dropped) console.log(`  dropped: ${v.reason}`);
+    }
+    return 0;
+  }
+
+  if (command === "pr") {
+    const diff = values["diff-file"]
+      ? readFileSync(values["diff-file"], "utf8")
+      : execFileSync("git", ["-C", scan.root, "diff", "--unified=3", `${values.base ?? "main"}...HEAD`], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+    if (!diff.trim()) throw new Error(`no changes between ${values.base ?? "main"} and HEAD`);
+    const p = provider(values);
+    if (p.id.includes("ollama:")) console.error(LOCAL_MODEL_NOTE);
+    const result = await generateDiffQuestions(scan, diff, p, { count: values.count ? Number(values.count) : undefined });
+    if (values.json) {
+      console.log(JSON.stringify(result, null, 2));
+    } else {
+      result.kept.forEach((q, i) => console.log(`${i + 1}. ${q.text}\n   ${q.file}${q.symbol ? ` › ${q.symbol}` : ""}`));
+      console.log(`\n${result.kept.length} questions about this change (${result.strictKept}/${result.asked} pass the strict check)`);
       for (const v of result.dropped) console.log(`  dropped: ${v.reason}`);
     }
     return 0;
