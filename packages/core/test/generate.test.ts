@@ -21,6 +21,26 @@ describe("parseQuestions", () => {
     expect(parseQuestions(JSON.stringify(q))).toEqual(q);
     expect(parseQuestions("Here:\n```json\n" + JSON.stringify(q) + "\n```")).toEqual(q);
   });
+  it("reads separate overview and code lists and labels each question", () => {
+    const raw = JSON.stringify({ overview: [{ text: "What is it for?", file: "README.md" }], code: [{ text: "How?", file: "a.ts", symbol: "f" }] });
+    expect(parseQuestions(raw)).toEqual([
+      { text: "What is it for?", file: "README.md", kind: "overview" },
+      { text: "How?", file: "a.ts", symbol: "f", kind: "code" },
+    ]);
+  });
+
+  it("accepts a `question` field, and treats symbol 'none' as no symbol", () => {
+    const raw = JSON.stringify({ overview: [{ question: "Why?", file: "README.md", symbol: "none" }], code: [] });
+    expect(parseQuestions(raw)).toEqual([{ text: "Why?", file: "README.md", kind: "overview" }]);
+  });
+
+  it("keeps a valid kind and ignores an unknown one", () => {
+    expect(parseQuestions('[{"text":"a","file":"x","kind":"overview"},{"text":"b","file":"x","kind":"weird"}]')).toEqual([
+      { text: "a", file: "x", kind: "overview" },
+      { text: "b", file: "x" },
+    ]);
+  });
+
   it("drops entries without text or file", () => {
     expect(parseQuestions('[{"text":"x"},{"file":"a"},{"text":"ok","file":"a.ts"}]')).toEqual([
       { text: "ok", file: "a.ts" },
@@ -41,7 +61,7 @@ describe("buildPrompt", () => {
 
   it("asks for a JSON schema so providers that support it can enforce the shape", () => {
     const { schema } = buildPrompt(scanRepo(root));
-    expect(schema).toMatchObject({ type: "object", required: ["questions"] });
+    expect(schema).toMatchObject({ type: "object", required: ["overview", "code"] });
   });
 
   it("shows source files before tests, scripts and seed files", () => {
@@ -54,6 +74,24 @@ describe("buildPrompt", () => {
     const { prompt } = buildPrompt(scanRepo(r));
     expect(prompt.indexOf("core.ts")).toBeLessThan(prompt.indexOf("test/a.test.ts"));
     expect(prompt.indexOf("core.ts")).toBeLessThan(prompt.indexOf("scripts/seed-demo-data.ts"));
+  });
+
+  it("mixes big-picture and code questions, about 40% big-picture by default", () => {
+    expect(buildPrompt(scanRepo(root)).prompt).toMatch(/Write 8 questions: 3 big-picture and 5 about specific code/);
+    expect(buildPrompt(scanRepo(root), { count: 5, overview: 0 }).prompt).toMatch(/Write 5 questions: 0 big-picture and 5 about specific code/);
+  });
+
+  it("shows the README so big-picture questions know what the project is for, and lets them cite it", () => {
+    const r = mkdtempSync(join(tmpdir(), "ri-readme-"));
+    writeFileSync(join(r, "README.md"), "# Auction house\n\nLive bidding on artworks.\n");
+    writeFileSync(join(r, "core.ts"), "export function run() {}\n");
+    const { prompt, schema } = buildPrompt(scanRepo(r));
+    expect(prompt).toContain("Live bidding on artworks.");
+    expect(prompt).toMatch(/Project files: README\.md/);
+    expect(schema).toMatchObject({
+      required: ["overview", "code"],
+      properties: { overview: { minItems: 3, maxItems: 3 }, code: { minItems: 5, maxItems: 5 } },
+    });
   });
 
   it("tells the model to avoid trivia and repeated symbols", () => {

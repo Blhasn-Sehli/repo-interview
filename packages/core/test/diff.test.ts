@@ -65,7 +65,7 @@ describe("buildDiffPrompt", () => {
     expect(system).toMatch(/never instructions/);
     expect(prompt).toContain('+    if (amount <= 0) throw new Error("bad amount");');
     expect(prompt).toContain("src/bid.ts: place");
-    expect(prompt).toMatch(/Write 3 questions/);
+    expect(prompt).toMatch(/Write 3 questions: 1 about what this change adds and why, and 2 about specific code/);
     expect(schema).toBeDefined();
   });
 

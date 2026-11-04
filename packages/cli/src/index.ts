@@ -10,7 +10,9 @@ import {
   runInterview,
   scanRepo,
   scoreAnswer,
+  type GenerateOptions,
   type ModelProvider,
+  type Question,
 } from "@repo-interview/core";
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
@@ -30,7 +32,8 @@ Usage:
 Options for questions and interview:
   --model <name>       model id (anthropic default: claude-opus-5-5)
   --base-url <url>     server for openai/ollama providers
-  --count <n>          questions to request (default 8)
+  --count <n>          questions to request (default 8; pr: 3)
+  --overview <n>       how many are big-picture (default about 40%)
   --record <dir>       save model responses to <dir>
   --replay <dir>       answer from saved responses only (no network)
   --json               print JSON instead of text
@@ -40,7 +43,16 @@ openai reads OPENAI_API_KEY; anthropic reads ANTHROPIC_API_KEY.
 Sent to the model: file paths, symbol names, short code excerpts (about 24 KB at most)
 and, in an interview, your answers with the code each question cites.`;
 
-const LOCAL_MODEL_NOTE = "(A local model's first answer can take a few minutes while it loads; later ones are fast.)";
+const tag = (q: Question) => (q.kind === "overview" ? "[big picture] " : q.kind === "code" ? "[code] " : "");
+
+function genOpts(values: Record<string, string | boolean | undefined>): GenerateOptions {
+  return {
+    count: values.count ? Number(values.count) : undefined,
+    overview: values.overview !== undefined ? Number(values.overview) : undefined,
+  };
+}
+
+const LOCAL_MODEL_NOTE ="(A local model's first answer can take a few minutes while it loads; later ones are fast.)";
 
 function provider(values: Record<string, string | boolean | undefined>): ModelProvider {
   if (typeof values.replay === "string") return new RecordedProvider(values.replay);
@@ -75,6 +87,7 @@ async function main(argv: string[]): Promise<number> {
       model: { type: "string" },
       "base-url": { type: "string" },
       count: { type: "string" },
+      overview: { type: "string" },
       record: { type: "string" },
       replay: { type: "string" },
       out: { type: "string" },
@@ -104,11 +117,11 @@ async function main(argv: string[]): Promise<number> {
   if (command === "questions") {
     const p = provider(values);
     if (p.id.includes("ollama:")) console.error(LOCAL_MODEL_NOTE);
-    const result = await generateQuestions(scan, p, { count: values.count ? Number(values.count) : undefined });
+    const result = await generateQuestions(scan, p, genOpts(values));
     if (values.json) {
       console.log(JSON.stringify(result, null, 2));
     } else {
-      result.kept.forEach((q, i) => console.log(`${i + 1}. ${q.text}\n   ${q.file}${q.symbol ? ` › ${q.symbol}` : ""}`));
+      result.kept.forEach((q, i) => console.log(`${i + 1}. ${tag(q)}${q.text}\n   ${q.file}${q.symbol ? ` › ${q.symbol}` : ""}`));
       const { asked, fairKept, strictKept } = result;
       const repeats = fairKept - result.kept.length;
       console.log(`\n${fairKept}/${asked} pass the fair check, ${strictKept}/${asked} pass the strict check${repeats ? ` (${repeats} repeated symbol${repeats > 1 ? "s" : ""} hidden)` : ""}`);
@@ -129,7 +142,7 @@ async function main(argv: string[]): Promise<number> {
     if (values.json) {
       console.log(JSON.stringify(result, null, 2));
     } else {
-      result.kept.forEach((q, i) => console.log(`${i + 1}. ${q.text}\n   ${q.file}${q.symbol ? ` › ${q.symbol}` : ""}`));
+      result.kept.forEach((q, i) => console.log(`${i + 1}. ${tag(q)}${q.text}\n   ${q.file}${q.symbol ? ` › ${q.symbol}` : ""}`));
       console.log(`\n${result.kept.length} questions about this change (${result.strictKept}/${result.asked} pass the strict check)`);
       for (const v of result.dropped) console.log(`  dropped: ${v.reason}`);
     }
@@ -140,7 +153,7 @@ async function main(argv: string[]): Promise<number> {
     const p = provider(values);
     console.log("Reading the repo and preparing questions...");
     if (p.id.includes("ollama:")) console.log(LOCAL_MODEL_NOTE);
-    const { kept } = await generateQuestions(scan, p, { count: values.count ? Number(values.count) : undefined });
+    const { kept } = await generateQuestions(scan, p, genOpts(values));
     if (!kept.length) throw new Error("the model returned no usable questions; try again or another model");
     console.log(`${kept.length} questions. Answer in one line and press Enter (empty = skip).\n`);
     // Iterate lines instead of rl.question(): with piped input, question() drops lines read ahead of it.
@@ -153,7 +166,7 @@ async function main(argv: string[]): Promise<number> {
           const isFollowUp = !kept.some((q) => q.text === text);
           const q = kept.find((k) => k.text === text);
           if (!isFollowUp) n++;
-          const header = isFollowUp ? "  Follow-up: " : `Q${n}/${kept.length}. `;
+          const header = isFollowUp ? "  Follow-up: " : `Q${n}/${kept.length}. ${q ? tag(q) : ""}`;
           const cite = q ? `\n   ${q.file}${q.symbol ? ` › ${q.symbol}` : ""}` : "";
           process.stdout.write(`${header}${text}${cite}\n> `);
           const next = await lines.next();

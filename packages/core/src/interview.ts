@@ -123,7 +123,8 @@ export function renderReport(repo: string, results: InterviewResult[]): string {
     "## Questions",
   ];
   results.forEach((r, i) => {
-    lines.push("", `### ${i + 1}. ${r.question.text}`, "", cite(r.question), "", `**Your answer:** ${r.answer || "(none)"}`, "", `**Score:** ${r.score ?? "n/a"}/3. ${r.feedback}`);
+    const kind = r.question.kind === "overview" ? "[big picture] " : r.question.kind === "code" ? "[code] " : "";
+    lines.push("", `### ${i + 1}. ${kind}${r.question.text}`, "", cite(r.question), "", `**Your answer:** ${r.answer || "(none)"}`, "", `**Score:** ${r.score ?? "n/a"}/3. ${r.feedback}`);
     if (r.followUp) {
       lines.push("", `**Follow-up:** ${r.followUp.question}`, "", `**Your answer:** ${r.followUp.answer || "(none)"}`, "", `**Score:** ${r.followUp.score ?? "n/a"}/3. ${r.followUp.feedback}`);
     }

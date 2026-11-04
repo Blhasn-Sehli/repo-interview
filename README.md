@@ -8,10 +8,12 @@ Early, rough edges expected. What works today:
 
 - `repo-interview scan <path>` lists source files and candidate symbols (regex-based, 8 language families).
 - `repo-interview questions <path> --provider anthropic|openai|ollama` asks a model for questions and drops any whose cited file or symbol does not exist (strict and fair checks, see the [test corpus](corpus/README.md)).
+- Questions come in two kinds: big-picture (what the project or feature does, its main parts, why it is built this way) and code. By default 3 of 8 are big-picture; change it with `--overview <n>`.
+- `repo-interview pr <path> --base <ref>` asks 3 questions about only the code a change touched: 1 about what it adds and why, 2 about the code.
 - `repo-interview interview <path> --provider ...` asks the questions in your terminal, grades each answer 0-3 against the cited code, asks one follow-up after a weak answer, and writes `interview-report.md` with what to study next.
 - `--record <dir>` / `--replay <dir>` save and replay model responses, so tests run offline.
 
-Measured so far: on 10 public repos with a small local model, 88.8% of questions cite real code under the strict check and 96.3% under the fair check ([details](corpus/README.md#results)). Grading quality has not been measured yet; with small local models it is rough.
+Measured so far: on 10 public repos with a small local model, 91.3% of questions cite real code under both the strict and the fair check ([details](corpus/README.md#results)). Grading quality has not been measured yet; with small local models it is rough.
 
 Not built yet: the PR gate Action, tree-sitter symbol lookup, multi-line answers.
 

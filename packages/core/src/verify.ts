@@ -7,6 +7,8 @@ export interface Question {
   file: string;
   /** identifier (function/class/const) the question cites, if any */
   symbol?: string;
+  /** big-picture (purpose, main parts, design) or about specific code */
+  kind?: "overview" | "code";
 }
 
 /** Which fair-mode rule rescued a citation the strict check rejected. */

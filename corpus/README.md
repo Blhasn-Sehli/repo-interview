@@ -27,14 +27,15 @@ Share of generated questions whose cited file and symbol exist. One run, one sma
 
 | Date | Model | Repos answered | Strict | Fair |
 | --- | --- | --- | --- | --- |
+| 2026-11-04 | ollama `qwen2.5-coder:3b` | 10/10 | 73/80 (91.3%) | 73/80 (91.3%) |
 | 2026-10-27 | ollama `qwen2.5-coder:3b` | 10/10 | 71/80 (88.8%) | 77/80 (96.3%) |
 | 2026-10-23 | ollama `qwen2.5-coder:3b` | 10/10 | 64/80 (80.0%) | 76/80 (95.0%) |
 
-The Oct 27 run uses a newer prompt and scanner (class methods; app code before tests, scripts and seeds; no trivia; each symbol at most once), so the two rows are different setups, not repeat measurements. Known gap: in cJSON the model still asks mostly about the bundled test framework instead of `cJSON.c`.
+The Oct 27 run uses a newer prompt and scanner (class methods; app code before tests, scripts and seeds; no trivia; each symbol at most once), so the rows are different setups, not repeat measurements. The Nov 4 run asks for 3 big-picture and 5 code questions per repo and shows the model the README. In Polly the model invented plausible file paths 5 times (for example `src/Polly/PolicyRegistry.cs`), in both kinds of question; the verifier dropped all of them, which is why only 2 of 8 Polly questions remain. Known gap: in cJSON the model still asks mostly about the bundled test framework instead of `cJSON.c`.
 
 - **Strict:** the path and the symbol text appear exactly as the model wrote them.
 - **Fair:** also accepts a path written without its folders when exactly one repo file ends with it (`unity.h` for `tests/unity/src/unity.h`), and `Class::method` when every part appears in the file.
-- Citations that fail both checks are invented: on Oct 27, three symbols missing from the cited files (`_parse_args`, `_check_iter`, `UNITY_FAIL_MESSAGE`).
+- Citations that fail both checks are invented: on Nov 4, six file paths that do not exist and one missing symbol (`RetrySyntax`).
 
 Per-repo details are in [`results/`](results/); the raw model replies are in [`recordings/`](recordings/), so `node corpus/run.mjs --replay corpus/recordings` recomputes both numbers offline.
 
