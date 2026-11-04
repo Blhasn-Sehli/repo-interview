@@ -1,0 +1,20 @@
+name: PR answers
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  score:
+    # Only replies from the PR's author; skip everything else before installing anything.
+    if: github.event.issue.pull_request && github.event.comment.user.login == github.event.issue.user.login
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      # Checks out the default branch (trusted code). The PR's code is fetched later and only read.
+      - uses: actions/checkout@v7
+      # Other repos use: Blhasn-Sehli/repo-interview@main
+      - uses: ./

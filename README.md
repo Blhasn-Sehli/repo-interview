@@ -15,7 +15,7 @@ Early, rough edges expected. What works today:
 
 Measured so far: on 10 public repos with a small local model, 91.3% of questions cite real code under both the strict and the fair check ([details](corpus/README.md#results)). Grading quality has not been measured yet; with small local models it is rough.
 
-Not built yet: scoring the author's reply to the PR comment, tree-sitter symbol lookup, multi-line answers.
+Not built yet: tree-sitter symbol lookup, multi-line answers in the terminal interview.
 
 ## On pull requests (GitHub Action)
 
@@ -38,6 +38,25 @@ jobs:
 ```
 
 On this repo's first run the whole step, including installing Ollama and downloading the model, took 86 seconds, of which the model took 45. Pull requests from forks get a read-only token, so their questions go to the job summary instead of a comment.
+
+To score the author's answers, add a second workflow. When the PR's author replies with numbered answers (`1.`, `2.`, `3.`), it grades each one 0-3 against the cited code and posts one scores comment, edited again if they reply again. The PR's code is fetched into a separate folder and only read, never run.
+
+```yaml
+name: PR answers
+on:
+  issue_comment:
+    types: [created]
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  score:
+    if: github.event.issue.pull_request && github.event.comment.user.login == github.event.issue.user.login
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: Blhasn-Sehli/repo-interview@main
+```
 
 ## Try it
 
