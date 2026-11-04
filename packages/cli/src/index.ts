@@ -45,11 +45,19 @@ and, in an interview, your answers with the code each question cites.`;
 
 const tag = (q: Question) => (q.kind === "overview" ? "[big picture] " : q.kind === "code" ? "[code] " : "");
 
+/** A whole number from an option, or undefined when the option is absent; nonsense like "abc" is an error. */
+function wholeNumber(name: string, value: string | boolean | undefined, min: number): number | undefined {
+  if (value === undefined) return undefined;
+  const n = Number(value);
+  if (!Number.isInteger(n) || n < min) throw new Error(`--${name} must be a whole number of at least ${min}, got "${value}"`);
+  return n;
+}
+
 function genOpts(values: Record<string, string | boolean | undefined>): GenerateOptions {
-  return {
-    count: values.count ? Number(values.count) : undefined,
-    overview: values.overview !== undefined ? Number(values.overview) : undefined,
-  };
+  const count = wholeNumber("count", values.count, 1);
+  const overview = wholeNumber("overview", values.overview, 0);
+  if (count !== undefined && overview !== undefined && overview > count) throw new Error(`--overview (${overview}) cannot be more than --count (${count})`);
+  return { count, overview };
 }
 
 const LOCAL_MODEL_NOTE ="(A local model's first answer can take a few minutes while it loads; later ones are fast.)";
@@ -138,7 +146,7 @@ async function main(argv: string[]): Promise<number> {
     if (!diff.trim()) throw new Error(`no changes between ${values.base ?? "main"} and HEAD`);
     const p = provider(values);
     if (p.id.includes("ollama:")) console.error(LOCAL_MODEL_NOTE);
-    const result = await generateDiffQuestions(scan, diff, p, { count: values.count ? Number(values.count) : undefined });
+    const result = await generateDiffQuestions(scan, diff, p, { count: wholeNumber("count", values.count, 1) });
     if (values.json) {
       console.log(JSON.stringify(result, null, 2));
     } else {
