@@ -20,7 +20,7 @@ import { basename, resolve } from "node:path";
 import { createInterface } from "node:readline";
 import { parseArgs } from "node:util";
 
-const USAGE = `repo-interview 0.0.0 (early skeleton)
+const USAGE = `repo-interview 0.0.0 (early: expect rough edges)
 
 Usage:
   repo-interview scan <path> [--json]
