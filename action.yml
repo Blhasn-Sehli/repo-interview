@@ -1,0 +1,71 @@
+name: repo-interview PR questions
+description: Ask a pull request's author a few questions about their own change, using a local model on the runner. Advisory; never blocks the PR.
+author: Blhasn-Sehli
+branding:
+  icon: help-circle
+  color: purple
+
+inputs:
+  model:
+    description: Ollama model to run on the runner (CPU only, so keep it small)
+    default: qwen2.5-coder:3b
+  count:
+    description: How many questions to ask (1 is about what the change adds; the rest are about code)
+    default: "3"
+  ollama-version:
+    description: Ollama release to install; checked against that release's sha256sum.txt
+    default: v0.40.9
+  github-token:
+    description: Token used to post the comment; needs pull-requests write
+    default: ${{ github.token }}
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+
+    - name: Build repo-interview
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      run: |
+        corepack enable
+        pnpm install --frozen-lockfile --silent
+        pnpm build
+
+    - name: Restore Ollama and model cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.ollama-bin
+          ~/.ollama/models
+        key: repo-interview-ollama-${{ inputs.ollama-version }}-${{ inputs.model }}
+
+    - name: Install and start Ollama
+      shell: bash
+      env:
+        OLLAMA_VERSION: ${{ inputs.ollama-version }}
+        MODEL: ${{ inputs.model }}
+      run: |
+        set -euo pipefail
+        if [ ! -x "$HOME/.ollama-bin/bin/ollama" ]; then
+          mkdir -p "$HOME/.ollama-bin" && cd "$HOME/.ollama-bin"
+          base="https://github.com/ollama/ollama/releases/download/$OLLAMA_VERSION"
+          curl -fsSL -o ollama-linux-amd64.tar.zst "$base/ollama-linux-amd64.tar.zst"
+          curl -fsSL -o sha256sum.txt "$base/sha256sum.txt"
+          grep ' ./ollama-linux-amd64.tar.zst$' sha256sum.txt | sed 's| \./| |' | sha256sum -c -
+          tar --zstd -xf ollama-linux-amd64.tar.zst
+          rm ollama-linux-amd64.tar.zst sha256sum.txt
+        fi
+        "$HOME/.ollama-bin/bin/ollama" serve > "$RUNNER_TEMP/ollama.log" 2>&1 &
+        for i in $(seq 1 60); do curl -fs http://localhost:11434/api/version > /dev/null && break; sleep 1; done
+        "$HOME/.ollama-bin/bin/ollama" pull "$MODEL" > /dev/null
+
+    - name: Ask questions about this change
+      shell: bash
+      env:
+        MODEL: ${{ inputs.model }}
+        COUNT: ${{ inputs.count }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+      run: node "${{ github.action_path }}/action/run.mjs"

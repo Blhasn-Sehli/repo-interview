@@ -4,3 +4,4 @@ export * from "./providers.js";
 export * from "./generate.js";
 export * from "./interview.js";
 export * from "./diff.js";
+export * from "./comment.js";

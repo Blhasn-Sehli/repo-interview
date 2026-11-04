@@ -1,0 +1,17 @@
+name: PR questions
+on: pull_request
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  questions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      # Other repos use: Blhasn-Sehli/repo-interview@main
+      - uses: ./
