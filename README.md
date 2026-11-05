@@ -21,6 +21,16 @@ You get 8 questions (3 big-picture, 5 about specific code). Answer each on one l
 
 Needs Node.js 22+ and [Ollama](https://ollama.com). Package: [repo-interview on npm](https://www.npmjs.com/package/repo-interview).
 
+## Inside Claude (MCP): no Ollama needed
+
+Let Claude (or any MCP client) run the interview with its own model, while repo-interview keeps it honest:
+
+```bash
+claude mcp add repo-interview -- npx -y repo-interview mcp
+```
+
+Then, in your project, ask Claude to "interview me about this repo", or use the `interview` prompt (`pr_interview` for the current branch). Claude reads the code and writes and grades the questions; repo-interview's tools list what exists (`scan_repo`), show the cited code (`read_code`), list a branch's changes (`pr_changes`) and drop any question about code that does not exist (`check_questions`). The tools only read files, never run them, and refuse paths outside the project.
+
 ## On pull requests (GitHub Action)
 
 Posts one comment with 3 questions about the PR's own change. It runs a small model with Ollama on the GitHub runner: free, no API key, and the code stays on the runner. It is advisory and never fails the PR.
@@ -70,6 +80,7 @@ jobs:
 | `questions <path>` | Just the questions; `--overview <n>` sets how many are big-picture |
 | `pr <path> --base main` | 3 questions about only the code changed since `main` (1 about what it adds, 2 about code) |
 | `scan <path>` | The files and symbols questions can cite |
+| `mcp` | Run as an MCP server for Claude and other MCP clients |
 
 Providers: `--provider ollama` (local, free), `anthropic` (`ANTHROPIC_API_KEY`) or `openai` (any OpenAI-compatible server, `OPENAI_API_KEY`). `--record <dir>` and `--replay <dir>` save and replay model replies, so runs can be checked offline.
 

@@ -12,6 +12,7 @@ repo-interview reads code that may be hostile (a pull request from a stranger, o
 - **The verifier limits what the model can make us say.** A question is shown only if the file it cites exists (and, for a pull request, was changed by it). Model text cannot add files or links outside the repository.
 - **PR comments are sanitised.** Model text in comments has HTML escaped, `@mentions` broken (so nobody gets pinged) and a length cap.
 - **The GitHub Action never runs pull request code.** Questions are generated from the diff; when the author's reply is scored, the PR's code is fetched into a separate folder and only read. The scoring workflow checks out the default branch, not the PR.
+- **The MCP server only reads, inside the project.** Its tools read files and run `git diff`; `read_code` refuses absolute paths and anything outside the project folder, including through symlinks, with the same message whether or not the file exists.
 - **It never blocks a pull request.** Failures become warnings, so a broken model or a hostile diff cannot hold up a merge.
 - **Local by default.** With Ollama, code stays on your machine or the CI runner. With a hosted provider (Anthropic, OpenAI-compatible), file paths, symbol names, short code excerpts and, in an interview, your answers are sent to that provider.
 - **Pinned downloads.** The Action installs a pinned Ollama release and checks it against the release's published sha256 sums.

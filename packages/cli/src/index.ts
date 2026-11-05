@@ -8,6 +8,7 @@ import {
   RecordedProvider,
   renderReport,
   runInterview,
+  createMcpServer,
   loadParsers,
   scanRepo,
   scoreAnswer,
@@ -21,6 +22,7 @@ import { basename, resolve } from "node:path";
 import { createRequire } from "node:module";
 import { createInterface } from "node:readline";
 import { parseArgs } from "node:util";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
 // dist/index.js and the npm bundle dist/repo-interview.js both sit one folder below package.json.
 const VERSION = (createRequire(import.meta.url)("../package.json") as { version: string }).version;
@@ -29,6 +31,8 @@ const USAGE = `repo-interview ${VERSION} (early: expect rough edges)
 
 Usage:
   repo-interview scan <path> [--json]
+  repo-interview mcp
+      run as an MCP server, e.g. claude mcp add repo-interview -- npx -y repo-interview mcp
   repo-interview questions <path> --provider <anthropic|openai|ollama> [options]
   repo-interview interview <path> --provider <anthropic|openai|ollama> [options]
   repo-interview pr <path> --provider <anthropic|openai|ollama> [--base <ref> | --diff-file <file>] [options]
@@ -110,6 +114,12 @@ async function main(argv: string[]): Promise<number> {
     },
   });
   const [command, path] = positionals;
+  if (command === "mcp") {
+    // Stdout belongs to the MCP protocol from here on; the client's model writes and grades the questions.
+    await loadParsers();
+    await createMcpServer().connect(new StdioServerTransport());
+    return new Promise<number>(() => {});
+  }
   if (values.help || !command || !path) {
     console.log(USAGE);
     return values.help ? 0 : 1;

@@ -6,3 +6,4 @@ export * from "./interview.js";
 export * from "./diff.js";
 export * from "./comment.js";
 export * from "./treesitter.js";
+export * from "./mcp.js";

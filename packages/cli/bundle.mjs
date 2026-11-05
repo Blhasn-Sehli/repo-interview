@@ -11,7 +11,7 @@ await build({
   platform: "node",
   format: "esm",
   target: "node22",
-  external: ["@anthropic-ai/sdk", "@vscode/tree-sitter-wasm"],
+  external: ["@anthropic-ai/sdk", "@vscode/tree-sitter-wasm", "@modelcontextprotocol/sdk", "zod"],
   logLevel: "warning",
 });
 copyFileSync("../../LICENSE", "LICENSE");

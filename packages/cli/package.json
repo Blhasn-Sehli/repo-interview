@@ -1,24 +1,48 @@
 {
   "name": "repo-interview",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Interviews you about your own repo or pull request. Every question cites real code, checked by a verifier. Runs on a free local model.",
-  "keywords": ["interview", "code-review", "pull-request", "github-action", "llm", "ollama", "cli"],
+  "keywords": [
+    "interview",
+    "code-review",
+    "pull-request",
+    "github-action",
+    "llm",
+    "ollama",
+    "cli",
+    "mcp",
+    "claude"
+  ],
   "license": "MIT",
   "author": "Bellhassen Sehli (https://github.com/Blhasn-Sehli)",
   "homepage": "https://github.com/Blhasn-Sehli/repo-interview#readme",
-  "repository": { "type": "git", "url": "git+https://github.com/Blhasn-Sehli/repo-interview.git", "directory": "packages/cli" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Blhasn-Sehli/repo-interview.git",
+    "directory": "packages/cli"
+  },
   "bugs": "https://github.com/Blhasn-Sehli/repo-interview/issues",
   "type": "module",
-  "bin": { "repo-interview": "dist/repo-interview.js" },
-  "files": ["dist/repo-interview.js", "README.md", "LICENSE"],
-  "engines": { "node": ">=22" },
+  "bin": {
+    "repo-interview": "dist/repo-interview.js"
+  },
+  "files": [
+    "dist/repo-interview.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json && node bundle.mjs",
     "prepack": "node bundle.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.137.0",
-    "@vscode/tree-sitter-wasm": "0.3.1"
+    "@vscode/tree-sitter-wasm": "0.3.1",
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@repo-interview/core": "workspace:*",
