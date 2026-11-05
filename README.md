@@ -1,5 +1,7 @@
 # repo-interview
 
+**[Website and demo](https://blhasn-sehli.github.io/repo-interview/)** · [npm](https://www.npmjs.com/package/repo-interview)
+
 **Can you explain your own code?** repo-interview reads your repository or pull request and asks you the questions an interviewer or reviewer would: what it does, why it is built this way, and how specific code works. Then it grades your answers and tells you what to study.
 
 Every question cites a real file and symbol. A verifier checks each citation and drops any question about code that does not exist, so the model cannot quiz you on something it made up. It runs on a free local model, so your code stays on your machine.
