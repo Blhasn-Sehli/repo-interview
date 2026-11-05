@@ -19,7 +19,7 @@ npx repo-interview interview . --provider ollama --model qwen2.5-coder:3b
 
 You get 8 questions (3 big-picture, 5 about specific code). Answer each on one line; a weak answer gets one follow-up. At the end `interview-report.md` shows your score and links to the files to study.
 
-Needs Node.js 22+ and [Ollama](https://ollama.com). Until the npm release is out, build from source: see [TESTING.md](TESTING.md).
+Needs Node.js 22+ and [Ollama](https://ollama.com). Package: [repo-interview on npm](https://www.npmjs.com/package/repo-interview).
 
 ## On pull requests (GitHub Action)
 

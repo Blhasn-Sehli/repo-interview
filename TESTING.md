@@ -6,27 +6,20 @@ Everything runs on a local model with [Ollama](https://ollama.com), so **your co
 
 ## Way 1: an interview in your terminal (about 20 minutes)
 
-You need Node.js 22 or newer, git, and Ollama.
+You need Node.js 22 or newer and Ollama.
 
 1. Install Ollama from https://ollama.com, open it, then download the model (about 2 GB, once):
    ```bash
    ollama pull qwen2.5-coder:3b
    ```
-2. Get repo-interview and build it:
+2. Go into **one of your own projects** and start the interview:
    ```bash
-   git clone https://github.com/Blhasn-Sehli/repo-interview
-   cd repo-interview
-   npm install -g pnpm
-   pnpm install
-   pnpm build
-   ```
-3. Run an interview on **one of your own projects** (replace the path):
-   ```bash
-   node packages/cli/dist/index.js interview /path/to/your/project --provider ollama --model qwen2.5-coder:3b
+   cd /path/to/your/project
+   npx repo-interview interview . --provider ollama --model qwen2.5-coder:3b
    ```
    - The first question can take a few minutes while the model loads.
    - Answer each question on one line and press Enter; press Enter alone to skip.
-   - At the end, `interview-report.md` (in the folder you ran the command from) lists your score and what to study next.
+   - At the end, `interview-report.md` (in your project folder) lists your score and what to study next.
 
 ## Way 2: questions on your pull requests (no install)
 
