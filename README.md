@@ -1,21 +1,25 @@
 # repo-interview
 
-Interviews you about your own repo (or a PR diff) so you can prove you understand the code. Questions cite real files and symbols; a verifier drops any that do not exist.
+**Can you explain your own code?** repo-interview reads your repository or pull request and asks you the questions an interviewer or reviewer would: what it does, why it is built this way, and how specific code works. Then it grades your answers and tells you what to study.
 
-## Status
+Every question cites a real file and symbol. A verifier checks each citation and drops any question about code that does not exist, so the model cannot quiz you on something it made up. It runs on a free local model, so your code stays on your machine.
 
-Early, rough edges expected. What works today:
+## Who it is for
 
-- `repo-interview scan <path>` lists source files and candidate symbols (regex-based, 8 language families).
-- `repo-interview questions <path> --provider anthropic|openai|ollama` asks a model for questions and drops any whose cited file or symbol does not exist (strict and fair checks, see the [test corpus](corpus/README.md)).
-- Questions come in two kinds: big-picture (what the project or feature does, its main parts, why it is built this way) and code. By default 3 of 8 are big-picture; change it with `--overview <n>`.
-- `repo-interview pr <path> --base <ref>` asks 3 questions about only the code a change touched: 1 about what it adds and why, 2 about the code.
-- `repo-interview interview <path> --provider ...` asks the questions in your terminal, grades each answer 0-3 against the cited code, asks one follow-up after a weak answer, and writes `interview-report.md` with what to study next.
-- `--record <dir>` / `--replay <dir>` save and replay model responses, so tests run offline.
+- **Students and job seekers** preparing to explain a portfolio project, especially one built with AI help.
+- **Developers** who want to check they really understand a codebase before they own it.
+- **Teams** who want authors to explain their own pull requests (advisory, never blocking).
 
-Measured so far: on 10 public repos with a small local model, an average of 3 runs has 90.7% of questions citing real code under the strict check (runs ranged 86.3-95.8%) and 92.8% under the fair check ([details](corpus/README.md#results)). Grading quality has not been measured yet; with small local models it is rough.
+## Quick start (terminal)
 
-Not built yet: tree-sitter symbol lookup, multi-line answers in the terminal interview.
+```bash
+ollama pull qwen2.5-coder:3b
+npx repo-interview interview . --provider ollama --model qwen2.5-coder:3b
+```
+
+You get 8 questions (3 big-picture, 5 about specific code). Answer each on one line; a weak answer gets one follow-up. At the end `interview-report.md` shows your score and links to the files to study.
+
+Needs Node.js 22+ and [Ollama](https://ollama.com). Until the npm release is out, build from source: see [TESTING.md](TESTING.md).
 
 ## On pull requests (GitHub Action)
 
@@ -58,13 +62,34 @@ jobs:
       - uses: Blhasn-Sehli/repo-interview@main
 ```
 
-## Try it
+## Commands
 
-```bash
-pnpm install && pnpm build
-node packages/cli/dist/index.js scan .
-node packages/cli/dist/index.js interview . --provider ollama --model qwen2.5-coder:3b
-```
+| Command | What it does |
+| --- | --- |
+| `interview <path>` | Questions in your terminal, each answer graded 0-3, one follow-up after a weak answer, then a report |
+| `questions <path>` | Just the questions; `--overview <n>` sets how many are big-picture |
+| `pr <path> --base main` | 3 questions about only the code changed since `main` (1 about what it adds, 2 about code) |
+| `scan <path>` | The files and symbols questions can cite |
+
+Providers: `--provider ollama` (local, free), `anthropic` (`ANTHROPIC_API_KEY`) or `openai` (any OpenAI-compatible server, `OPENAI_API_KEY`). `--record <dir>` and `--replay <dir>` save and replay model replies, so runs can be checked offline.
+
+## How well it works (measured)
+
+On 10 public repositories in 10 languages, with the small local model `qwen2.5-coder:3b`, an average of 3 runs has **90.7%** of generated questions citing real code under the strict check (runs ranged 86.3-95.8%) and **92.8%** under the fair check. The verifier removes the rest before you see them. Every number comes with its recorded model replies, so you can recheck it offline: see the [test corpus](corpus/README.md#results).
+
+Not measured yet: how well grading agrees with a human, and how useful testers find the questions. Both are in progress.
+
+## How it is different
+
+Other tools also ask authors about their code or pull requests, for example comprehension-gate, PR Guard, CCG, Gater, churn interview and PathFinder. repo-interview's focus:
+
+- **Checked citations.** A question reaches you only if the file and symbol it cites exist (and, for a PR, were changed by it), and the rate is measured and published.
+- **Local and free by default.** Ollama on your machine or on the GitHub runner; no account, no API key, no code sent anywhere.
+- **For learning, not only gating.** The terminal interview ends with a report of what to study, which suits students and job interview practice.
+
+## Status
+
+Early: expect rough edges. Symbols come from tree-sitter for TypeScript, JavaScript and Python and from patterns for Go, Rust, Java, Kotlin, C#, C/C++, Ruby and PHP. Answers in the terminal are one line each. See [SECURITY.md](SECURITY.md) for how it handles untrusted code, and [CONTRIBUTING.md](CONTRIBUTING.md) to help.
 
 ## License
 
