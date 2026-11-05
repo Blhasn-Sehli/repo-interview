@@ -137,20 +137,26 @@ export function ollama(opts: OllamaOptions): ModelProvider {
 /**
  * Replays responses saved in `dir`, keyed by a hash of the request. With an inner provider,
  * missing responses are fetched and saved (record mode); without one, they throw (offline tests).
+ * `run` keeps a separate recording per repeat, so the same prompt can be sampled several times;
+ * run 1 uses the original key, so recordings made before runs existed still replay.
  */
 export class RecordedProvider implements ModelProvider {
   readonly id: string;
+  private readonly run: number;
 
-  constructor(private readonly dir: string, private readonly inner?: ModelProvider) {
+  constructor(private readonly dir: string, private readonly inner?: ModelProvider, opts: { run?: number } = {}) {
+    this.run = opts.run ?? 1;
     this.id = inner ? `recording:${inner.id}` : "recorded";
   }
 
-  static key(req: CompletionRequest): string {
-    return createHash("sha256").update(req.system).update("\0").update(req.prompt).digest("hex").slice(0, 16);
+  static key(req: CompletionRequest, run = 1): string {
+    const h = createHash("sha256").update(req.system).update("\0").update(req.prompt);
+    if (run > 1) h.update(`\0run:${run}`);
+    return h.digest("hex").slice(0, 16);
   }
 
   async complete(req: CompletionRequest): Promise<string> {
-    const key = RecordedProvider.key(req);
+    const key = RecordedProvider.key(req, this.run);
     const path = join(this.dir, `${key}.json`);
     if (existsSync(path)) return (JSON.parse(readFileSync(path, "utf8")) as { response: string }).response;
     if (!this.inner) throw new Error(`no recording for request ${key} in ${this.dir}; run once with a real provider to record it`);

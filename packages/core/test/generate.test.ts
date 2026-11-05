@@ -149,6 +149,16 @@ describe("RecordedProvider", () => {
     expect(await replay.complete(req)).toBe("hello");
     await expect(replay.complete({ system: "s", prompt: "other" })).rejects.toThrow(/no recording/);
   });
+
+  it("keeps a separate recording per run, and run 1 matches recordings made before runs existed", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "ri-runs-"));
+    const req = { system: "s", prompt: "p" };
+    await new RecordedProvider(dir, stub("first")).complete(req);
+    await new RecordedProvider(dir, stub("second"), { run: 2 }).complete(req);
+    expect(readdirSync(dir)).toHaveLength(2);
+    expect(await new RecordedProvider(dir, undefined, { run: 1 }).complete(req)).toBe("first");
+    expect(await new RecordedProvider(dir, undefined, { run: 2 }).complete(req)).toBe("second");
+  });
 });
 
 describe("ollama", () => {
