@@ -201,6 +201,24 @@ section.alt { background: var(--bg-alt); border-block: 1px solid var(--rule); }
 .safe b { font-family: var(--font-display); font-size: 18px; }
 .safe p { color: var(--soft); font-size: 15px; }
 
+/* self-hosted */
+.selfhost { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 48px; align-items: start; }
+.hostlist { display: grid; gap: 12px; }
+.host { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 16px; background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 18px 20px; }
+.host-k { font: 700 11.5px var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); padding-top: 3px; }
+.host b { font-family: var(--font-display); font-size: 18px; }
+.host p { color: var(--soft); font-size: 15px; margin-top: 4px; }
+.host pre { margin: 10px 0 0; background: var(--term-bg); color: var(--term-ink); border-radius: 9px; padding: 9px 12px; font: 12.5px/1.55 var(--font-mono); overflow-x: auto; white-space: pre; }
+
+/* open source */
+.contrib { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.contrib-card { display: grid; gap: 8px; align-content: start; background: var(--card); border: 1px solid var(--rule); border-radius: 16px; padding: 22px; color: var(--ink); text-decoration: none; transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease; }
+.contrib-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--accent) 45%, var(--rule)); }
+.contrib-num { font: 700 34px/1 var(--font-display); color: var(--accent); }
+.contrib-card b { font-family: var(--font-display); font-size: 18px; }
+.contrib-card p { color: var(--soft); font-size: 15px; }
+.contrib-card .more { font: 600 14px var(--font-body); color: var(--accent); margin-top: 4px; }
+
 /* final cta */
 .final { text-align: center; display: grid; gap: 18px; justify-items: center; }
 .final .cmd { margin-top: 6px; }
@@ -209,8 +227,9 @@ footer { border-top: 1px solid var(--rule); padding-block: 30px 44px; color: var
 footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 footer a { color: var(--soft); }
 
+@media (max-width: 1100px) { .contrib { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 1000px) {
-  .hero, .verify, .proof { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .hero, .verify, .proof, .selfhost { grid-template-columns: minmax(0, 1fr); gap: 40px; }
   .ways { grid-template-columns: minmax(0, 1fr); }
   .safety { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .term pre { min-height: 0; }
@@ -222,7 +241,8 @@ footer a { color: var(--soft); }
   .stat { padding: 20px 14px; }
   .stat:nth-child(odd) { border-left: none; padding-left: 0; }
   .stat:nth-child(n+3) { border-top: 1px solid var(--rule); }
-  .safety { grid-template-columns: minmax(0, 1fr); }
+  .safety, .contrib { grid-template-columns: minmax(0, 1fr); }
+  .host { grid-template-columns: minmax(0, 1fr); gap: 6px; }
   section.band { padding-block: 64px; }
   .hero { padding-block: 40px 56px; }
 }
@@ -243,7 +263,8 @@ footer a { color: var(--soft); }
           <a href="#use">Use it</a>
           <a href="#verifier">Verifier</a>
           <a href="#proof">Measured</a>
-          <a href="https://www.npmjs.com/package/repo-interview">npm</a>
+          <a href="#self-host">Self-host</a>
+          <a href="#contribute">Contribute</a>
         </div>
         <button class="iconbtn" type="button" id="theme" aria-label="Switch between light and dark mode" title="Light / dark">
           <svg class="theme-light-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
@@ -410,6 +431,52 @@ npx repo-interview interview . \
       <div class="safe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M9 10h6"/></svg><b>Safe PR comments</b><p>HTML is escaped and @mentions broken, so a hostile diff can't make the bot ping or inject anything.</p></div>
       <div class="safe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><b>Never blocks a merge</b><p>Failures become warnings. Scoring reads the PR's code in a separate folder and never executes it.</p></div>
     </div>
+  </div>
+</section>
+
+<section class="band alt" id="self-host">
+  <div class="wrap selfhost">
+    <div class="section-head" style="margin-bottom:0">
+      <div class="eyebrow">Self-hosted</div>
+      <h2>Runs entirely on your own infrastructure</h2>
+      <p>No account, no hosted service, no telemetry. Pick where the model runs; repo-interview only talks to the model endpoint you choose and, in the Action, to the GitHub API to post its comment.</p>
+      <div class="cta-row" style="margin-top:22px">
+        <a class="btn ghost" href="https://github.com/Blhasn-Sehli/repo-interview/blob/main/SECURITY.md">Read the security model</a>
+      </div>
+    </div>
+    <div class="hostlist">
+      <div class="host"><span class="host-k">Laptop</span><div><b>Ollama on your machine</b><p>The default. Code and answers never leave your computer.</p><pre>--provider ollama --model qwen2.5-coder:3b</pre></div></div>
+      <div class="host"><span class="host-k">Your server</span><div><b>Any OpenAI-compatible endpoint</b><p>Point it at your own inference server, for example vLLM, LM Studio or a remote Ollama.</p><pre>--provider openai --base-url http://gpu-box:8000/v1 --model &lt;name&gt;</pre></div></div>
+      <div class="host"><span class="host-k">Your CI</span><div><b>The Action brings its own model</b><p>It installs a pinned Ollama release (checked against its published sha256) on the runner and caches it. Choose the model and Ollama version as inputs.</p><pre>with:
+  model: qwen2.5-coder:3b
+  ollama-version: v0.40.9</pre></div></div>
+      <div class="host"><span class="host-k">Optional</span><div><b>Hosted models when you want them</b><p>Anthropic or any OpenAI-compatible provider with your own key, or Claude itself through MCP.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="contribute">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Open source</div>
+      <h2>MIT licensed, built in the open</h2>
+      <p>Issues, ideas and pull requests are welcome. Every number on this page can be rechecked from the repository, and so can every change.</p>
+    </div>
+    <div class="contrib">
+      <a class="contrib-card" href="https://github.com/Blhasn-Sehli/repo-interview/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22">
+        <span class="contrib-num">5</span><b>Good first issues</b><p>Scoped tasks with pointers to the code: tree-sitter for Go, honouring .gitignore, multi-line answers, JSON output, vendored folders.</p><span class="more">Pick one →</span>
+      </a>
+      <a class="contrib-card" href="https://github.com/Blhasn-Sehli/repo-interview/blob/main/CONTRIBUTING.md">
+        <span class="contrib-num">63</span><b>Tests, offline</b><p>Model calls in tests use stubs or recorded replies, so <code>pnpm test</code> needs no API key or GPU. Write the failing test first.</p><span class="more">Contributing guide →</span>
+      </a>
+      <a class="contrib-card" href="https://github.com/Blhasn-Sehli/repo-interview/tree/main/corpus">
+        <span class="contrib-num">10</span><b>Reproducible numbers</b><p>The test corpus pins 10 public repos to commits and records every model reply. Change a prompt, rerun, show before and after.</p><span class="more">Test corpus →</span>
+      </a>
+      <a class="contrib-card" href="https://github.com/Blhasn-Sehli/repo-interview/security">
+        <span class="contrib-num">🔒</span><b>Private security reports</b><p>Found a way around the verifier or the sandboxing rules? Report it privately through GitHub; you'll get a reply within a week.</p><span class="more">Report a vulnerability →</span>
+      </a>
+    </div>
+    <p class="fine" style="margin-top:22px">AI-assisted contributions are welcome on one condition: you understand every line you submit. Fittingly, that's what this project is for.</p>
   </div>
 </section>
 
