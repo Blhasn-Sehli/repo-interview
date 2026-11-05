@@ -110,6 +110,10 @@ nav { display: flex; justify-content: space-between; align-items: center; height
 .strike::after { content: ""; position: absolute; left: -3%; right: -3%; top: 54%; height: 0.1em; border-radius: 4px; background: var(--drop); transform: rotate(-3deg); }
 .grad { background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .lede { margin-top: 20px; font-size: 20px; color: var(--soft); max-width: 48ch; }
+.checks { list-style: none; margin: 22px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 22px; max-width: 620px; }
+.checks li { display: flex; gap: 10px; align-items: flex-start; font-size: 15.5px; color: var(--soft); }
+.checks b { color: var(--ink); }
+.checks svg { flex: none; width: 18px; height: 18px; margin-top: 3px; padding: 3px; box-sizing: content-box; border-radius: 6px; color: var(--keep); background: color-mix(in srgb, var(--keep) 14%, transparent); }
 .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
 .cmd { margin-top: 18px; display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--rule); border-radius: 12px; padding: 10px 10px 10px 16px; max-width: 560px; }
 .cmd code { flex: 1; min-width: 0; font-size: 13.5px; overflow-wrap: anywhere; }
@@ -201,15 +205,6 @@ section.alt { background: var(--bg-alt); border-block: 1px solid var(--rule); }
 .safe b { font-family: var(--font-display); font-size: 18px; }
 .safe p { color: var(--soft); font-size: 15px; }
 
-/* self-hosted */
-.selfhost { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 48px; align-items: start; }
-.hostlist { display: grid; gap: 12px; }
-.host { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 16px; background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 18px 20px; }
-.host-k { font: 700 11.5px var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); padding-top: 3px; }
-.host b { font-family: var(--font-display); font-size: 18px; }
-.host p { color: var(--soft); font-size: 15px; margin-top: 4px; }
-.host pre { margin: 10px 0 0; background: var(--term-bg); color: var(--term-ink); border-radius: 9px; padding: 9px 12px; font: 12.5px/1.55 var(--font-mono); overflow-x: auto; white-space: pre; }
-
 /* open source */
 .contrib { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
 .contrib-card { display: grid; gap: 8px; align-content: start; background: var(--card); border: 1px solid var(--rule); border-radius: 16px; padding: 22px; color: var(--ink); text-decoration: none; transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease; }
@@ -229,7 +224,7 @@ footer a { color: var(--soft); }
 
 @media (max-width: 1100px) { .contrib { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 1000px) {
-  .hero, .verify, .proof, .selfhost { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .hero, .verify, .proof { grid-template-columns: minmax(0, 1fr); gap: 40px; }
   .ways { grid-template-columns: minmax(0, 1fr); }
   .safety { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .term pre { min-height: 0; }
@@ -242,7 +237,7 @@ footer a { color: var(--soft); }
   .stat:nth-child(odd) { border-left: none; padding-left: 0; }
   .stat:nth-child(n+3) { border-top: 1px solid var(--rule); }
   .safety, .contrib { grid-template-columns: minmax(0, 1fr); }
-  .host { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .checks { grid-template-columns: minmax(0, 1fr); }
   section.band { padding-block: 64px; }
   .hero { padding-block: 40px 56px; }
 }
@@ -263,7 +258,6 @@ footer a { color: var(--soft); }
           <a href="#use">Use it</a>
           <a href="#verifier">Verifier</a>
           <a href="#proof">Measured</a>
-          <a href="#self-host">Self-host</a>
           <a href="#contribute">Contribute</a>
         </div>
         <button class="iconbtn" type="button" id="theme" aria-label="Switch between light and dark mode" title="Light / dark">
@@ -289,6 +283,12 @@ footer a { color: var(--soft); }
       </div>
       <h1>Can you explain your <span class="strike">AI's</span> <span class="grad">own code?</span></h1>
       <p class="lede">repo-interview reads your repository or pull request and asks what an interviewer or reviewer would. Every question cites real code, and a verifier throws out any question about code that doesn't exist.</p>
+      <ul class="checks">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Self-hosted</b>: your laptop, your server or your CI</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Open source</b>, MIT licensed</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>No account</b>, no telemetry, no API key needed</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Claude, Ollama or any <b>OpenAI-compatible</b> model</span></li>
+      </ul>
       <div class="cta-row">
         <a class="btn primary" href="#use">Get started
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -339,7 +339,7 @@ footer a { color: var(--soft); }
         <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 17 6-6-6-6M12 19h8"/></svg></span>
         <span class="tag">Terminal · free and local</span>
         <h3>Your code stays on your machine</h3>
-        <p>Runs on a small model with Ollama. 8 questions, a follow-up after a weak answer, then a report of what to study.</p>
+        <p>Runs on a small model with Ollama, or any OpenAI-compatible server you host (vLLM, LM Studio) with <code>--provider openai --base-url</code>. 8 questions, a follow-up after a weak answer, then a report of what to study.</p>
         <pre>ollama pull qwen2.5-coder:3b
 npx repo-interview interview . \
   --provider ollama \
@@ -434,28 +434,7 @@ npx repo-interview interview . \
   </div>
 </section>
 
-<section class="band alt" id="self-host">
-  <div class="wrap selfhost">
-    <div class="section-head" style="margin-bottom:0">
-      <div class="eyebrow">Self-hosted</div>
-      <h2>Runs entirely on your own infrastructure</h2>
-      <p>No account, no hosted service, no telemetry. Pick where the model runs; repo-interview only talks to the model endpoint you choose and, in the Action, to the GitHub API to post its comment.</p>
-      <div class="cta-row" style="margin-top:22px">
-        <a class="btn ghost" href="https://github.com/Blhasn-Sehli/repo-interview/blob/main/SECURITY.md">Read the security model</a>
-      </div>
-    </div>
-    <div class="hostlist">
-      <div class="host"><span class="host-k">Laptop</span><div><b>Ollama on your machine</b><p>The default. Code and answers never leave your computer.</p><pre>--provider ollama --model qwen2.5-coder:3b</pre></div></div>
-      <div class="host"><span class="host-k">Your server</span><div><b>Any OpenAI-compatible endpoint</b><p>Point it at your own inference server, for example vLLM, LM Studio or a remote Ollama.</p><pre>--provider openai --base-url http://gpu-box:8000/v1 --model &lt;name&gt;</pre></div></div>
-      <div class="host"><span class="host-k">Your CI</span><div><b>The Action brings its own model</b><p>It installs a pinned Ollama release (checked against its published sha256) on the runner and caches it. Choose the model and Ollama version as inputs.</p><pre>with:
-  model: qwen2.5-coder:3b
-  ollama-version: v0.40.9</pre></div></div>
-      <div class="host"><span class="host-k">Optional</span><div><b>Hosted models when you want them</b><p>Anthropic or any OpenAI-compatible provider with your own key, or Claude itself through MCP.</p></div></div>
-    </div>
-  </div>
-</section>
-
-<section class="band" id="contribute">
+<section class="band alt" id="contribute">
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">Open source</div>
@@ -480,7 +459,7 @@ npx repo-interview interview . \
   </div>
 </section>
 
-<section class="band alt">
+<section class="band">
   <div class="wrap final">
     <h2>Try it on your own code</h2>
     <p class="fine" style="font-size:18px">One line to add it to Claude. Then ask it to interview you.</p>
