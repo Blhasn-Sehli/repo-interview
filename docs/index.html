@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>repo-interview</title>
+<meta name="description" content="Interviews you about your own repo or pull request. Every question cites real code, checked by a verifier. Free and local, or inside Claude.">
+<meta property="og:title" content="repo-interview: can you explain your own code?">
+<meta property="og:description" content="Interview questions about your own repo or PR, every one checked to cite real code. Free, local, or inside Claude.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a single scroll, hero with a live terminal replay, then three ways in, proof, safety.
+   Visual idea: an interviewer's marked-up transcript; the verifier's strike-through is the signature mark. */
+:root {
+  --paper: #f2f4f6;
+  --sheet: #ffffff;
+  --ink: #15202b;
+  --soft: #55616d;
+  --rule: #d7dde3;
+  --accent: #1f5fbf;
+  --accent-ink: #ffffff;
+  --keep: #1f7a4d;
+  --drop: #c2410c;
+  --term-bg: #101820;
+  --term-ink: #dbe4ec;
+  --term-dim: #7f8d99;
+  --term-q: #8cc8ff;
+  --term-keep: #6ee7a8;
+  --term-drop: #ff9b6a;
+  --font-display: "Familjen Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0d1318; --sheet: #141c23; --ink: #e3eaf0; --soft: #9aa8b4; --rule: #26313b;
+    --accent: #7fb2ff; --accent-ink: #0d1318; --keep: #5fd39a; --drop: #ff9a66;
+    --term-bg: #081016; color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 17px; line-height: 1.6; }
+a { color: var(--accent); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left)); padding-right: max(20px, env(safe-area-inset-right)); }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.08; letter-spacing: -0.015em; text-wrap: balance; margin: 0; }
+h2 { font-size: clamp(26px, 4vw, 36px); }
+h3 { font-size: 20px; }
+p { margin: 0; }
+.eyebrow { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--soft); }
+code, kbd { font-family: var(--font-mono); font-size: 0.88em; }
+
+/* nav */
+nav { display: flex; justify-content: space-between; align-items: center; padding-block: 18px; gap: 16px; flex-wrap: wrap; }
+.brand { font-family: var(--font-mono); font-weight: 600; color: var(--ink); text-decoration: none; }
+.brand span { color: var(--accent); }
+.navlinks { display: flex; gap: 18px; font-size: 15px; }
+.navlinks a { color: var(--soft); text-decoration: none; }
+.navlinks a:hover { color: var(--ink); }
+
+/* hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 40px; align-items: center; padding-block: 28px 56px; }
+.hero h1 { font-size: clamp(38px, 6vw, 64px); }
+.strike { position: relative; white-space: nowrap; }
+.strike::after { content: ""; position: absolute; left: -2%; right: -2%; top: 55%; height: 0.09em; background: var(--drop); transform: rotate(-2deg); }
+.hero .lede { margin-top: 18px; font-size: 19px; color: var(--soft); max-width: 46ch; }
+.cta { margin-top: 26px; display: grid; gap: 10px; max-width: 460px; }
+.cmd { display: flex; align-items: center; gap: 8px; background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 10px 10px 10px 14px; min-width: 0; }
+.cmd code { flex: 1; min-width: 0; overflow-x: auto; white-space: nowrap; font-size: 14px; }
+.cmd button { flex: none; font: 600 13px var(--font-body); border: 1px solid var(--rule); background: var(--paper); color: var(--ink); border-radius: 7px; padding: 6px 10px; cursor: pointer; }
+.cmd button:hover { border-color: var(--accent); }
+.hint { font-size: 14px; color: var(--soft); }
+
+/* terminal */
+.term { background: var(--term-bg); color: var(--term-ink); border-radius: 14px; box-shadow: 0 20px 50px -24px rgba(10, 20, 30, 0.55); overflow: hidden; min-width: 0; }
+.term-bar { display: flex; gap: 7px; padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.07); align-items: center; }
+.term-bar i { width: 11px; height: 11px; border-radius: 50%; background: #34414d; display: block; }
+.term-bar span { margin-left: 8px; font: 12px var(--font-mono); color: var(--term-dim); }
+.term pre { margin: 0; padding: 16px 18px 20px; font: 13px/1.6 var(--font-mono); white-space: pre-wrap; word-break: break-word; min-height: 360px; }
+.t-dim { color: var(--term-dim); } .t-q { color: var(--term-q); } .t-keep { color: var(--term-keep); } .t-drop { color: var(--term-drop); }
+.t-strike { text-decoration: line-through; text-decoration-color: var(--term-drop); color: var(--term-dim); }
+.caret { display: inline-block; width: 8px; height: 1.1em; vertical-align: -0.2em; background: var(--term-ink); animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.term-foot { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 10px 18px 14px; font: 12px var(--font-mono); color: var(--term-dim); }
+.term-foot button { font: inherit; color: var(--term-ink); background: none; border: 1px solid #34414d; border-radius: 6px; padding: 3px 9px; cursor: pointer; }
+
+/* sections */
+section.band { padding-block: 64px; border-top: 1px solid var(--rule); }
+.section-head { display: grid; gap: 10px; max-width: 640px; margin-bottom: 32px; }
+.section-head p { color: var(--soft); }
+.ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.way { background: var(--sheet); border: 1px solid var(--rule); border-radius: 12px; padding: 20px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.way .tag { font: 600 12px var(--font-mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); }
+.way p { color: var(--soft); font-size: 15px; }
+.way pre { margin: 0; background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; padding: 10px 12px; font: 12.5px/1.55 var(--font-mono); overflow-x: auto; white-space: pre; }
+.way.featured { border-color: var(--accent); }
+
+/* verifier */
+.verify { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.qlist { display: grid; gap: 12px; }
+.q { background: var(--sheet); border: 1px solid var(--rule); border-left: 4px solid var(--keep); border-radius: 10px; padding: 14px 16px; }
+.q.dropped { border-left-color: var(--drop); }
+.q .cite { font: 13px var(--font-mono); color: var(--soft); margin-top: 6px; overflow-wrap: anywhere; }
+.q.dropped .text { text-decoration: line-through; text-decoration-color: var(--drop); color: var(--soft); }
+.q .why { font: 600 13px var(--font-mono); color: var(--drop); margin-top: 6px; }
+.verify .explain { display: grid; gap: 14px; color: var(--soft); }
+.verify .explain strong { color: var(--ink); }
+
+/* PR comment */
+.pr { background: var(--sheet); border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; max-width: 760px; }
+.pr-head { display: flex; gap: 10px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--rule); background: var(--paper); font-size: 14px; color: var(--soft); flex-wrap: wrap; }
+.pr-head b { color: var(--ink); }
+.bot { font: 600 11px var(--font-mono); border: 1px solid var(--rule); border-radius: 999px; padding: 1px 7px; }
+.pr-body { padding: 18px 20px; display: grid; gap: 12px; }
+.pr-body h3 { font-size: 17px; }
+.pr-body ol { margin: 0; padding-left: 20px; display: grid; gap: 10px; }
+.pr-body .k { font-weight: 700; }
+.pr-body small { color: var(--soft); }
+
+/* numbers */
+.numbers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.num { padding: 18px 0; border-top: 3px solid var(--ink); }
+.num .v { font: 700 clamp(34px, 5vw, 48px)/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.num .k { margin-top: 8px; color: var(--soft); font-size: 15px; }
+.fine { margin-top: 18px; color: var(--soft); font-size: 15px; max-width: 70ch; }
+
+/* safety */
+.safety { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 36px; }
+.safety div { display: grid; gap: 4px; }
+.safety b { font-family: var(--font-display); font-size: 18px; }
+.safety p { color: var(--soft); font-size: 15px; }
+
+footer { border-top: 1px solid var(--rule); padding-block: 28px 40px; color: var(--soft); font-size: 15px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+@media (max-width: 860px) {
+  .hero, .verify { grid-template-columns: minmax(0, 1fr); }
+  .ways, .numbers { grid-template-columns: minmax(0, 1fr); }
+  .safety { grid-template-columns: minmax(0, 1fr); }
+  .term pre { min-height: 0; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .caret { animation: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="brand" href="#">repo<span>-</span>interview</a>
+    <div class="navlinks">
+      <a href="#use">Use it</a>
+      <a href="#proof">Measured</a>
+      <a href="https://github.com/Blhasn-Sehli/repo-interview">GitHub</a>
+      <a href="https://www.npmjs.com/package/repo-interview">npm</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <div class="eyebrow">Open source · MIT</div>
+      <h1 style="margin-top:12px">Can you explain your <span class="strike">AI's</span> own code?</h1>
+      <p class="lede">repo-interview reads your repository or pull request and asks what an interviewer or reviewer would. Every question cites real code, and a verifier throws out any question about code that doesn't exist.</p>
+      <div class="cta">
+        <div class="cmd"><code>claude mcp add repo-interview -- npx -y repo-interview mcp</code><button type="button" data-copy="claude mcp add repo-interview -- npx -y repo-interview mcp">Copy</button></div>
+        <p class="hint">Then ask Claude: “interview me about this repo”. Prefer a free local model? <a href="#use">See the other ways</a>.</p>
+      </div>
+    </div>
+
+    <figure class="term" aria-label="Replay of a real repo-interview run" style="margin:0">
+      <div class="term-bar"><i></i><i></i><i></i><span>real run · qwen2.5-coder:3b · Nov 2026</span></div>
+      <pre id="term" aria-live="off"></pre>
+      <div class="term-foot"><span>Output replayed from real runs on <a href="https://github.com/sindresorhus/ky" style="color:inherit">ky</a> and <a href="https://github.com/expressjs/express" style="color:inherit">express</a>.</span><button type="button" id="replay">Replay</button></div>
+    </figure>
+  </header>
+</div>
+
+<section class="band" id="use">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Three ways in</div>
+      <h2>Use it where you already work</h2>
+      <p>Same engine everywhere: scan the code, ask about it, check every citation before you see the question.</p>
+    </div>
+    <div class="ways">
+      <article class="way featured">
+        <span class="tag">Inside Claude · easiest</span>
+        <h3>No setup beyond Claude</h3>
+        <p>Claude writes and grades the questions; repo-interview gives it the real code and drops anything invented. Tools only read, never run code, and stay inside the project.</p>
+        <pre>claude mcp add repo-interview -- \
+  npx -y repo-interview mcp</pre>
+        <p>Then: “interview me about this repo”, or “quiz me about my branch”.</p>
+      </article>
+      <article class="way">
+        <span class="tag">Terminal · free and local</span>
+        <h3>Your code stays on your machine</h3>
+        <p>Runs on a small model with Ollama. 8 questions, a follow-up after a weak answer, then a report of what to study.</p>
+        <pre>ollama pull qwen2.5-coder:3b
+npx repo-interview interview . \
+  --provider ollama \
+  --model qwen2.5-coder:3b</pre>
+      </article>
+      <article class="way">
+        <span class="tag">GitHub Action · for teams</span>
+        <h3>Three questions on every PR</h3>
+        <p>Free Ollama on the runner, no API key. Advisory only: it never blocks a merge. The author can reply with numbered answers to get a score.</p>
+        <pre>- uses: actions/checkout@v7
+  with:
+    fetch-depth: 2
+- uses: Blhasn-Sehli/repo-interview@main</pre>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="verifier">
+  <div class="wrap verify">
+    <div>
+      <div class="section-head" style="margin-bottom:20px">
+        <div class="eyebrow">The verifier</div>
+        <h2>Questions about code that exists. Only.</h2>
+      </div>
+      <div class="qlist">
+        <div class="q"><div class="text">Can you explain the main components of the Express.js application and how they interact?</div><div class="cite">lib/application.js › init · kept</div></div>
+        <div class="q"><div class="text">How does Express.js handle errors, and what is the role of middleware in this process?</div><div class="cite">lib/application.js › error · kept</div></div>
+        <div class="q dropped"><div class="text">What is the purpose of the <code>Router</code> class in Express, and how can it be used to handle different routes?</div><div class="cite">lib/router.js › handler</div><div class="why">dropped: file not found: lib/router.js</div></div>
+      </div>
+    </div>
+    <div class="explain">
+      <p>These three came from one real run on <a href="https://github.com/expressjs/express">express</a>. The third sounds right: older Express had a <code>lib/router</code> folder. Today's Express moved its router into a separate package, so the file the model cited doesn't exist.</p>
+      <p><strong>A model that invents a citation would quiz you on code you don't have.</strong> repo-interview checks every cited file and symbol against the repository and drops the question before you see it. For pull requests, the cited file must also be one the PR changed.</p>
+      <p>Two checks, both reported: <strong>strict</strong> (exactly as written) and <strong>fair</strong> (also accepts a path without its folders when only one file matches, and <code>Class::method</code>).</p>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="pr">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">On pull requests</div>
+      <h2>What the Action posted on a real PR</h2>
+      <p>From <a href="https://github.com/Blhasn-Sehli/repo-interview/pull/1">repo-interview #1</a>, which made the CLI reject bad <code>--count</code> values. 86 seconds on the GitHub runner, including installing Ollama and the model.</p>
+    </div>
+    <div class="pr">
+      <div class="pr-head"><b>github-actions</b><span class="bot">bot</span><span>commented</span></div>
+      <div class="pr-body">
+        <h3>🧠 repo-interview: questions about this change</h3>
+        <ol>
+          <li><span class="k">[big picture]</span> What is the purpose of the <code>wholeNumber</code> function and how is it used in this change?<br><small><code>packages/cli/src/index.ts</code> › <code>wholeNumber</code></small></li>
+          <li><span class="k">[code]</span> How does the <code>genOpts</code> function now handle validation and type checking of the <code>count</code> and <code>overview</code> options?<br><small><code>packages/cli/src/index.ts</code> › <code>genOpts</code></small></li>
+          <li><span class="k">[code]</span> What error is thrown if the <code>--count</code> option is less than the <code>--overview</code> option, and why is this validation necessary?<br><small><code>packages/cli/src/index.ts</code> › <code>generateDiffQuestions</code></small></li>
+        </ol>
+        <small>Advisory only: this never blocks the PR. Every question cites a file this PR changed, checked to exist.</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="proof">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Measured, not claimed</div>
+      <h2>How often questions cite real code</h2>
+      <p>10 public repositories in 10 languages, 8 questions each, the small local model <code>qwen2.5-coder:3b</code>, averaged over 3 runs.</p>
+    </div>
+    <div class="numbers">
+      <div class="num"><div class="v">90.7%</div><div class="k">pass the strict check (runs: 86.3–95.8%)</div></div>
+      <div class="num"><div class="v">92.8%</div><div class="k">pass the fair check (runs: 90.0–95.8%)</div></div>
+      <div class="num"><div class="v">0</div><div class="k">invented citations shown to you: the verifier drops the rest</div></div>
+    </div>
+    <p class="fine">Every model reply behind these numbers is recorded, so anyone can recheck them offline with <code>node corpus/run.mjs --replay corpus/recordings</code>. Not measured yet: how well grading agrees with a human, and how useful testers find the questions. <a href="https://github.com/Blhasn-Sehli/repo-interview/tree/main/corpus#results">Method and per-repo results</a>.</p>
+  </div>
+</section>
+
+<section class="band" id="safety">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Untrusted code, handled as data</div>
+      <h2>Built for code you didn't write</h2>
+    </div>
+    <div class="safety">
+      <div><b>Never runs repository code</b><p>Files and diffs are read as text. The prompts tell the model they are data, not instructions.</p></div>
+      <div><b>Stays inside the project</b><p>The MCP tools refuse absolute paths and anything outside the project folder, symlinks included.</p></div>
+      <div><b>Safe PR comments</b><p>Model text has HTML escaped and @mentions broken, so a hostile diff can't make the bot ping or inject anything.</p></div>
+      <div><b>Never blocks a merge</b><p>Failures become warnings. Scoring reads the PR's code in a separate folder and never executes it.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <footer>
+    <span>repo-interview · MIT · by <a href="https://github.com/Blhasn-Sehli">Bellhassen Sehli</a></span>
+    <span><a href="https://github.com/Blhasn-Sehli/repo-interview">GitHub</a> · <a href="https://www.npmjs.com/package/repo-interview">npm</a> · <a href="https://github.com/Blhasn-Sehli/repo-interview/blob/main/SECURITY.md">Security</a></span>
+  </footer>
+</div>
+
+<script>
+// Copy buttons: clipboard when allowed, otherwise select the text.
+document.querySelectorAll("[data-copy]").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(btn.dataset.copy); btn.textContent = "Copied"; }
+    catch { const r = document.createRange(); r.selectNodeContents(btn.previousElementSibling); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = "Selected"; }
+    setTimeout(() => (btn.textContent = "Copy"), 1600);
+  });
+});
+
+// Terminal replay: real output from two runs, typed out line by line.
+const script = [
+  ["$ npx repo-interview questions . --count 3", ""],
+  ["  # in a clone of sindresorhus/ky", "t-dim"],
+  ["", ""],
+  ["1. [big picture] What does Ky do for its users and how does it connect its main parts?", "t-q"],
+  ["   source/core/Ky.ts › Ky", "t-dim"],
+  ["2. [code] How does the `raceWithTimeout` function work and why is it important for Ky?", "t-q"],
+  ["   source/core/Ky.ts › raceWithTimeout", "t-dim"],
+  ["3. [code] Explain the purpose and usage of the `cancelReturnedBody` function in the Ky library.", "t-q"],
+  ["   source/core/Ky.ts › cancelReturnedBody", "t-dim"],
+  ["", ""],
+  ["3/3 pass the strict check", "t-keep"],
+  ["", ""],
+  ["$ npx repo-interview questions .   # in expressjs/express", ""],
+  ["  ...", "t-dim"],
+  ["What is the purpose of the `Router` class in Express?", "t-strike"],
+  ["  dropped: file not found: lib/router.js", "t-drop"],
+  ["", ""],
+  ["7/8 pass the strict check", "t-keep"],
+];
+const term = document.getElementById("term");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let timer;
+function render(upTo, partial) {
+  term.textContent = "";
+  script.slice(0, upTo).forEach(([text, cls], i) => {
+    const span = document.createElement("span");
+    if (cls) span.className = cls;
+    span.textContent = (i === upTo - 1 && partial !== undefined ? text.slice(0, partial) : text) + "\n";
+    term.appendChild(span);
+  });
+  const caret = document.createElement("span");
+  caret.className = "caret";
+  term.appendChild(caret);
+}
+function play() {
+  clearTimeout(timer);
+  if (reduce) return render(script.length);
+  let line = 1, ch = 0;
+  const step = () => {
+    const [text] = script[line - 1];
+    const isCmd = text.startsWith("$");
+    if (isCmd && ch < text.length) { ch += 2; render(line, ch); timer = setTimeout(step, 28); return; }
+    render(line);
+    if (line >= script.length) return;
+    line += 1; ch = 0;
+    timer = setTimeout(step, isCmd ? 500 : text ? 170 : 90);
+  };
+  step();
+}
+// Start with the finished output visible, then replay, so the page is complete at rest.
+render(script.length);
+setTimeout(play, 900);
+document.getElementById("replay").addEventListener("click", play);
+</script>
+</body>
+</html>
