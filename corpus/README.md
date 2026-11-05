@@ -25,6 +25,10 @@ Checked 21 Oct 2026 with the GitHub API: none archived, all licenses as listed.
 
 Share of generated questions whose cited file and symbol exist. One run, one small local model, 8 questions per repo; not yet a benchmark.
 
+**Latest, averaged over 3 runs (Nov 5):** strict **90.7%** (runs: 86.3%, 95.8%, 90.0%), fair **92.8%** (90.0%, 95.8%, 92.5%), with ollama `qwen2.5-coder:3b`, 8 questions per repo. Run 2 covers 9 repos, because Ollama timed out once while starting (ky). Same setup as Nov 4 (c) below, which is run 1. Details: [`results/2026-11-05T2235.json`](results/2026-11-05T2235.json).
+
+Earlier single runs:
+
 | Date | Model | Repos answered | Strict | Fair |
 | --- | --- | --- | --- | --- |
 | 2026-11-04 (c) | ollama `qwen2.5-coder:3b` | 10/10 | 69/80 (86.3%) | 72/80 (90.0%) |

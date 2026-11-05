@@ -13,7 +13,7 @@ Early, rough edges expected. What works today:
 - `repo-interview interview <path> --provider ...` asks the questions in your terminal, grades each answer 0-3 against the cited code, asks one follow-up after a weak answer, and writes `interview-report.md` with what to study next.
 - `--record <dir>` / `--replay <dir>` save and replay model responses, so tests run offline.
 
-Measured so far: on 10 public repos with a small local model, the latest run has 86.3% of questions citing real code under the strict check and 90.0% under the fair check; single runs vary by several points ([details](corpus/README.md#results)). Grading quality has not been measured yet; with small local models it is rough.
+Measured so far: on 10 public repos with a small local model, an average of 3 runs has 90.7% of questions citing real code under the strict check (runs ranged 86.3-95.8%) and 92.8% under the fair check ([details](corpus/README.md#results)). Grading quality has not been measured yet; with small local models it is rough.
 
 Not built yet: tree-sitter symbol lookup, multi-line answers in the terminal interview.
 

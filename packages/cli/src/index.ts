@@ -18,10 +18,14 @@ import {
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { basename, resolve } from "node:path";
+import { createRequire } from "node:module";
 import { createInterface } from "node:readline";
 import { parseArgs } from "node:util";
 
-const USAGE = `repo-interview 0.0.0 (early: expect rough edges)
+// dist/index.js and the npm bundle dist/repo-interview.js both sit one folder below package.json.
+const VERSION = (createRequire(import.meta.url)("../package.json") as { version: string }).version;
+
+const USAGE = `repo-interview ${VERSION} (early: expect rough edges)
 
 Usage:
   repo-interview scan <path> [--json]
