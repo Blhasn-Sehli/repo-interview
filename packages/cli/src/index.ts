@@ -125,9 +125,10 @@ async function main(argv: string[]): Promise<number> {
   }
 
   if (command === "questions") {
+    const opts = genOpts(values);
     const p = provider(values);
     if (p.id.includes("ollama:")) console.error(LOCAL_MODEL_NOTE);
-    const result = await generateQuestions(scan, p, genOpts(values));
+    const result = await generateQuestions(scan, p, opts);
     if (values.json) {
       console.log(JSON.stringify(result, null, 2));
     } else {
@@ -142,13 +143,14 @@ async function main(argv: string[]): Promise<number> {
   }
 
   if (command === "pr") {
+    const count = wholeNumber("count", values.count, 1);
     const diff = values["diff-file"]
       ? readFileSync(values["diff-file"], "utf8")
       : execFileSync("git", ["-C", scan.root, "diff", "--unified=3", `${values.base ?? "main"}...HEAD`], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
     if (!diff.trim()) throw new Error(`no changes between ${values.base ?? "main"} and HEAD`);
     const p = provider(values);
     if (p.id.includes("ollama:")) console.error(LOCAL_MODEL_NOTE);
-    const result = await generateDiffQuestions(scan, diff, p, { count: wholeNumber("count", values.count, 1) });
+    const result = await generateDiffQuestions(scan, diff, p, { count });
     if (values.json) {
       console.log(JSON.stringify(result, null, 2));
     } else {
@@ -160,10 +162,11 @@ async function main(argv: string[]): Promise<number> {
   }
 
   if (command === "interview") {
+    const opts = genOpts(values);
     const p = provider(values);
     console.log("Reading the repo and preparing questions...");
     if (p.id.includes("ollama:")) console.log(LOCAL_MODEL_NOTE);
-    const { kept } = await generateQuestions(scan, p, genOpts(values));
+    const { kept } = await generateQuestions(scan, p, opts);
     if (!kept.length) throw new Error("the model returned no usable questions; try again or another model");
     console.log(`${kept.length} questions. Answer in one line and press Enter (empty = skip).\n`);
     // Iterate lines instead of rl.question(): with piped input, question() drops lines read ahead of it.
